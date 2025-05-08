@@ -20,6 +20,17 @@ class Game {
     cf_set_target_framerate(60)
     cf_set_fixed_timestep(60)
     cf_set_fixed_timestep_max_updates(5)
+
+    mountContentDirectory(as: "content/")
+  }
+
+  func mountContentDirectory(as dest: String) {
+    guard let base = cf_fs_get_base_directory() else {
+      fatalError("Could not get base directoy")
+    }
+    var path = String(cString: base)
+    path += "content"
+    cf_fs_mount(path, dest, false)
   }
 
   func run() {
