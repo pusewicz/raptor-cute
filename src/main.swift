@@ -1,0 +1,3 @@
+import Cute
+
+Game().run()

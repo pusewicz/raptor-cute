@@ -1,0 +1,4 @@
+module Cute [extern_c] {
+  header "cute.shim.h"
+  export *
+}
