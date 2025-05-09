@@ -55,6 +55,18 @@ class Game {
 
   func update() {
     state.player.update()
+    state.playerBeams.indices.forEach {
+      state.playerBeams[$0].update()
+      if state.playerBeams[$0].position.y > 64 + 8 {
+        state.playerBeams[$0].destroy()
+      }
+    }
+    state.playerBeams.removeAll(where: { $0.isDestroyed })
+
+    if state.player.didShoot {
+      let position = CF_V2(x: state.player.position.x, y: state.player.position.y + 2)
+      state.playerBeams.append(PlayerBeam(at: position))
+    }
     cf_sprite_update(&background)
   }
 
@@ -62,6 +74,7 @@ class Game {
     cf_draw_push()
     cf_draw_scale_v2(scaleV2)
     renderBackground()
+    renderPlayerBeams()
     state.player.draw()
     cf_draw_pop()
     cf_app_draw_onto_screen(true)
@@ -75,6 +88,12 @@ class Game {
         cf_sprite_draw(&background)
         cf_draw_pop()
       }
+    }
+  }
+
+  func renderPlayerBeams() {
+    for beam in state.playerBeams {
+      beam.draw()
     }
   }
 

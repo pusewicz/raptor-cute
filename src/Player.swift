@@ -1,12 +1,14 @@
 import Cute
 
 struct Player {
-  var position: CF_V2
-  var shipSprite: CF_Sprite
-  var boosterSprite: CF_Sprite
+  private(set) var position: CF_V2
+  private var shipSprite: CF_Sprite
+  private var boosterSprite: CF_Sprite
+  private(set) var didShoot = false
+  private var shootCooldown = 0
 
   init() {
-    position = CF_V2()
+    position = CF_V2(x: 0, y: -42)
     shipSprite = cf_make_sprite("content/player_ship.aseprite")
     boosterSprite = cf_make_sprite("content/boosters.aseprite")
 
@@ -14,6 +16,7 @@ struct Player {
   }
 
   mutating func update() {
+    didShoot = false
     cf_sprite_play(&shipSprite, "default")
 
     if cf_key_down(CF_KEY_W) {  // Move up
@@ -30,12 +33,22 @@ struct Player {
         cf_sprite_play(&boosterSprite, "left")
       }
     }
+
     if cf_key_down(CF_KEY_D) {  // Move right
       position.x += 1
       cf_sprite_play(&shipSprite, "right")
       if !cf_sprite_is_playing(&boosterSprite, "right") {
         cf_sprite_play(&boosterSprite, "right")
       }
+    }
+
+    if cf_key_down(CF_KEY_SPACE) && shootCooldown == 0 {
+      didShoot = true
+      shootCooldown = 8
+    }
+
+    if shootCooldown > 0 {
+      shootCooldown -= 1
     }
 
     if !(cf_key_down(CF_KEY_W) || cf_key_down(CF_KEY_S) || cf_key_down(CF_KEY_A)
