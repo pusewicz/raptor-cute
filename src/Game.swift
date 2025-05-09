@@ -3,13 +3,21 @@ import Cute
 class Game {
   nonisolated(unsafe) static weak var current: Game!
 
+  let screenSize: Int32 = 64 * 2
+  let scale: Float = 4
+  let scaleV2: CF_V2
+
+  var state: State!
+  var background: CF_Sprite!
+
   init() {
+    scaleV2 = CF_V2(x: scale, y: scale)
     Game.current = self
 
     let options: CF_AppOptionFlags = Int32(CF_APP_OPTIONS_WINDOW_POS_CENTERED_BIT.rawValue)
 
     let result = cf_make_app(
-      "Raptor", 0, 0, 0, 640, 480, options,
+      "Raptor", 0, 0, 0, screenSize * Int32(scale), screenSize * Int32(scale), options,
       CommandLine.unsafeArgv[0])
 
     guard !cf_is_error(result) else {
@@ -22,6 +30,9 @@ class Game {
     cf_set_fixed_timestep_max_updates(5)
 
     mountContentDirectory(as: "content/")
+
+    state = State(player: Player())
+    background = cf_make_sprite("content/background.aseprite")
   }
 
   func mountContentDirectory(as dest: String) {
@@ -43,10 +54,28 @@ class Game {
   }
 
   func update() {
+    state.player.update()
+    cf_sprite_update(&background)
   }
 
   func render() {
+    cf_draw_push()
+    cf_draw_scale_v2(scaleV2)
+    renderBackground()
+    state.player.draw()
+    cf_draw_pop()
     cf_app_draw_onto_screen(true)
+  }
+
+  func renderBackground() {
+    for x in [-1, 1] {
+      for y in [-1, 1] {
+        cf_draw_push()
+        cf_draw_translate(Float(32 * x), Float(32 * y))
+        cf_sprite_draw(&background)
+        cf_draw_pop()
+      }
+    }
   }
 
   deinit {
