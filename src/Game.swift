@@ -12,7 +12,6 @@ class Game {
 
   init() {
     scaleV2 = CF_V2(x: scale, y: scale)
-    Game.current = self
 
     let options: CF_AppOptionFlags = Int32(CF_APP_OPTIONS_WINDOW_POS_CENTERED_BIT.rawValue)
 
@@ -33,6 +32,8 @@ class Game {
 
     state = State(player: Player())
     background = cf_make_sprite("content/background.aseprite")
+
+    Game.current = self
   }
 
   func mountContentDirectory(as dest: String) {
@@ -54,28 +55,41 @@ class Game {
   }
 
   func update() {
-    state.player.update()
-    state.playerBeams.indices.forEach {
-      state.playerBeams[$0].update()
-      if state.playerBeams[$0].position.y > 64 + 8 {
-        state.playerBeams[$0].destroy()
-      }
-    }
-    state.playerBeams.removeAll(where: { $0.isDestroyed })
+    updatePlayer()
+    updatePlayerBeams()
+    cf_sprite_update(&background)
+  }
 
+  func updatePlayer() {
+    state.player.update()
     if state.player.didShoot {
       let position = CF_V2(x: state.player.position.x, y: state.player.position.y + 2)
       state.playerBeams.append(PlayerBeam(at: position))
     }
-    cf_sprite_update(&background)
+  }
+
+  func updatePlayerBeams() {
+    for i in state.playerBeams.indices {
+      state.playerBeams[i].update()
+
+      // Mark beam as destroyed when out of bounds
+      if state.playerBeams[i].position.y > 64 + 8 {
+        state.playerBeams[i].destroy()
+      }
+    }
+
+    // Remove destroyed beams
+    state.playerBeams.removeAll(where: { $0.isDestroyed })
   }
 
   func render() {
     cf_draw_push()
     cf_draw_scale_v2(scaleV2)
+
     renderBackground()
     renderPlayerBeams()
     state.player.draw()
+
     cf_draw_pop()
     cf_app_draw_onto_screen(true)
   }
@@ -92,8 +106,8 @@ class Game {
   }
 
   func renderPlayerBeams() {
-    for beam in state.playerBeams {
-      beam.draw()
+    for i in state.playerBeams.indices {
+      state.playerBeams[i].draw()
     }
   }
 
