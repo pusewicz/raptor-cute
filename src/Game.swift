@@ -3,7 +3,7 @@ import CCute
 class Game {
   nonisolated(unsafe) static weak var current: Game!
 
-  let screenSize: Int32 = 64 * 2
+  let screenSize: Int32 = 64 * 3
   let scale: Float = 4
   let scaleV2: CF_V2
 
@@ -118,10 +118,10 @@ class Game {
   }
 
   func renderBackground() {
-    for x in [-1, 1] {
-      for y in [-1, 1] {
+    for x in [-1, 0, 1] {
+      for y in [-1, 0, 1] {
         cf_draw_push()
-        cf_draw_translate(Float(32 * x), Float(32 * y))
+        cf_draw_translate(Float(64 * x), Float(64 * y))
         background.draw()
         cf_draw_pop()
       }
