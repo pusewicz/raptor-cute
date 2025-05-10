@@ -1,4 +1,4 @@
-import Cute
+import CCute
 
 class Game {
   nonisolated(unsafe) static weak var current: Game!
