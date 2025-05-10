@@ -9,15 +9,15 @@ struct Player {
 
   init() {
     position = CF_V2(x: 0, y: -42)
-    shipSprite = cf_make_sprite("content/player_ship.aseprite")
-    boosterSprite = cf_make_sprite("content/boosters.aseprite")
+    shipSprite = CF_Sprite.fromAseprite(path: "content/player_ship.aseprite")
+    boosterSprite = CF_Sprite.fromAseprite(path: "content/boosters.aseprite")
 
-    cf_sprite_play(&shipSprite, "default")
+    shipSprite.play(animation: "default")
   }
 
   mutating func update() {
     didShoot = false
-    cf_sprite_play(&shipSprite, "default")
+    shipSprite.play(animation: "default")
 
     if cf_key_down(CF_KEY_W) {  // Move up
       position.y += 1
@@ -28,17 +28,17 @@ struct Player {
 
     if cf_key_down(CF_KEY_A) {  // Move left
       position.x -= 1
-      cf_sprite_play(&shipSprite, "left")
-      if !cf_sprite_is_playing(&boosterSprite, "left") {
-        cf_sprite_play(&boosterSprite, "left")
+      shipSprite.play(animation: "left")
+      if !boosterSprite.isPlaying(animation: "left") {
+        boosterSprite.play(animation: "left")
       }
     }
 
     if cf_key_down(CF_KEY_D) {  // Move right
       position.x += 1
-      cf_sprite_play(&shipSprite, "right")
-      if !cf_sprite_is_playing(&boosterSprite, "right") {
-        cf_sprite_play(&boosterSprite, "right")
+      shipSprite.play(animation: "right")
+      if !boosterSprite.isPlaying(animation: "right") {
+        boosterSprite.play(animation: "right")
       }
     }
 
@@ -54,25 +54,22 @@ struct Player {
     if !(cf_key_down(CF_KEY_W) || cf_key_down(CF_KEY_S) || cf_key_down(CF_KEY_A)
       || cf_key_down(CF_KEY_D))
     {
-      if !cf_sprite_is_playing(&boosterSprite, "idle") {
-        cf_sprite_play(&boosterSprite, "idle")
+      if !boosterSprite.isPlaying(animation: "idle") {
+        boosterSprite.play(animation: "idle")
       }
     }
 
-    cf_sprite_update(&boosterSprite)
+    boosterSprite.update()
 
     shipSprite.transform.p = position
     boosterSprite.transform.p = position
   }
 
-  func draw() {
-    var shipSprite = shipSprite
-    var boosterSprite = boosterSprite
-
+  mutating func draw() {
     cf_draw_push()
-    cf_sprite_draw(&shipSprite)
+    shipSprite.draw()
     cf_draw_translate(0, -16)
-    cf_sprite_draw(&boosterSprite)
+    boosterSprite.draw()
     cf_draw_pop()
   }
 }

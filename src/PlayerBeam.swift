@@ -9,7 +9,7 @@ struct PlayerBeam {
   init(at position: CF_V2, speed: Float = 3) {
     self.position = position
     self.speed = speed
-    self.sprite = cf_make_sprite("content/player_beam.aseprite")
+    self.sprite = CF_Sprite.fromAseprite(path: "content/player_beam.aseprite")
   }
 
   // Updates the beam's position
@@ -25,7 +25,7 @@ struct PlayerBeam {
   mutating func draw() {
     cf_draw_push()
     cf_draw_translate_v2(position)
-    cf_sprite_draw(&sprite)
+    sprite.draw()
     cf_draw_pop()
   }
 }

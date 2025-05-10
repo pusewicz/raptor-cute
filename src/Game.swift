@@ -31,7 +31,7 @@ class Game {
     mountContentDirectory(as: "content/")
 
     state = State(player: Player())
-    background = cf_make_sprite("content/background.aseprite")
+    background = CF_Sprite.fromAseprite(path: "content/background.aseprite")
 
     Game.current = self
   }
@@ -99,7 +99,7 @@ class Game {
       for y in [-1, 1] {
         cf_draw_push()
         cf_draw_translate(Float(32 * x), Float(32 * y))
-        cf_sprite_draw(&background)
+        background.draw()
         cf_draw_pop()
       }
     }
