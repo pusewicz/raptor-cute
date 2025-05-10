@@ -31,6 +31,13 @@ class Game {
     mountContentDirectory(as: "content/")
 
     state = State(player: Player())
+
+    /// Add 3 enemies in a row
+    for i in [-1, 0, 1] {
+      let position = CF_V2(x: Float(i) * (16 + 4), y: 64)
+      state.enemies.append(Enemy(at: position))
+    }
+
     background = CF_Sprite.fromAseprite(path: "content/background.aseprite")
 
     Game.current = self
@@ -57,7 +64,8 @@ class Game {
   func update() {
     updatePlayer()
     updatePlayerBeams()
-    cf_sprite_update(&background)
+    updateEnemies()
+    background.update()
   }
 
   func updatePlayer() {
@@ -82,12 +90,27 @@ class Game {
     state.playerBeams.removeAll(where: { $0.isDestroyed })
   }
 
+  func updateEnemies() {
+    for i in state.enemies.indices {
+      state.enemies[i].update()
+
+      // Mark enemy as destroyed when out of bounds
+      if state.enemies[i].position.y < -64 - 8 {
+        state.enemies[i].destroy()
+      }
+    }
+
+    // Remove destroyed enemies
+    state.enemies.removeAll(where: { $0.isDestroyed })
+  }
+
   func render() {
     cf_draw_push()
     cf_draw_scale_v2(scaleV2)
 
     renderBackground()
     renderPlayerBeams()
+    renderEnemies()
     state.player.draw()
 
     cf_draw_pop()
@@ -108,6 +131,12 @@ class Game {
   func renderPlayerBeams() {
     for i in state.playerBeams.indices {
       state.playerBeams[i].draw()
+    }
+  }
+
+  func renderEnemies() {
+    for i in state.enemies.indices {
+      state.enemies[i].draw()
     }
   }
 
