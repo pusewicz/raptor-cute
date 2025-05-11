@@ -4,19 +4,31 @@ class Game {
   nonisolated(unsafe) static weak var current: Game!
 
   let screenSize: Int32 = 64 * 3
-  let scale: Float = 4
+  let scale: Int32 = 4
   let scaleV2: CF_V2
 
   var state: State!
   var background: CF_Sprite!
 
+  /// Screen width and height
+  var width: Int32 = 0
+  var height: Int32 = 0
+
+  var canvasWidth: Int32 {
+    return width / scale
+  }
+
+  var canvasHeight: Int32 {
+    return height / scale
+  }
+
   init() {
-    scaleV2 = CF_V2(x: scale, y: scale)
+    scaleV2 = CF_V2(x: Float(scale), y: Float(scale))
 
     let options: CF_AppOptionFlags = Int32(CF_APP_OPTIONS_WINDOW_POS_CENTERED_BIT.rawValue)
 
     let result = cf_make_app(
-      "Raptor", 0, 0, 0, screenSize * Int32(scale), screenSize * Int32(scale), options,
+      "Raptor", 0, 0, 0, screenSize * scale, screenSize * scale, options,
       CommandLine.unsafeArgv[0])
 
     guard !cf_is_error(result) else {
@@ -27,6 +39,7 @@ class Game {
     cf_set_target_framerate(60)
     cf_set_fixed_timestep(60)
     cf_set_fixed_timestep_max_updates(5)
+    cf_app_get_size(&width, &height)
 
     mountContentDirectory(as: "content/")
 
@@ -62,14 +75,21 @@ class Game {
   }
 
   func update() {
+    cf_app_get_size(&width, &height)
+
     updatePlayer()
     updatePlayerBeams()
     updateEnemies()
     background.update()
+
+    let title =
+      "Raptor - \(state.player.position.x), \(state.player.position.y), Enemies: \(state.enemies.count), Beams: \(state.playerBeams.count)"
+    cf_app_set_title(title)
   }
 
   func updatePlayer() {
     state.player.update()
+
     if state.player.didShoot {
       let position = CF_V2(x: state.player.position.x, y: state.player.position.y + 2)
       state.playerBeams.append(PlayerBeam(at: position))
@@ -81,7 +101,7 @@ class Game {
       state.playerBeams[i].update()
 
       // Mark beam as destroyed when out of bounds
-      if state.playerBeams[i].position.y > 64 + 8 {
+      if state.playerBeams[i].position.y > Float(canvasHeight / 2) + 8 {
         state.playerBeams[i].destroy()
       }
     }
@@ -95,7 +115,7 @@ class Game {
       state.enemies[i].update()
 
       // Mark enemy as destroyed when out of bounds
-      if state.enemies[i].position.y < -64 - 8 {
+      if state.enemies[i].position.y < Float(-canvasHeight / 2) - 8 {
         state.enemies[i].destroy()
       }
     }
