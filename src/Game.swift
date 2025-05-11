@@ -80,6 +80,15 @@ class Game {
     updatePlayer()
     updatePlayerBeams()
     updateEnemies()
+
+    checkCollisions()
+
+    // Remove destroyed beams
+    state.playerBeams.removeAll(where: { $0.isDestroyed })
+
+    // Remove destroyed enemies
+    state.enemies.removeAll(where: { $0.isDestroyed })
+
     background.update()
 
     let title =
@@ -105,9 +114,6 @@ class Game {
         state.playerBeams[i].destroy()
       }
     }
-
-    // Remove destroyed beams
-    state.playerBeams.removeAll(where: { $0.isDestroyed })
   }
 
   func updateEnemies() {
@@ -119,9 +125,17 @@ class Game {
         state.enemies[i].destroy()
       }
     }
+  }
 
-    // Remove destroyed enemies
-    state.enemies.removeAll(where: { $0.isDestroyed })
+  func checkCollisions() {
+    for i in state.playerBeams.indices {
+      for j in state.enemies.indices {
+        if state.playerBeams[i].collides(with: state.enemies[j]) {
+          state.playerBeams[i].destroy()
+          state.enemies[j].destroy()
+        }
+      }
+    }
   }
 
   func render() {

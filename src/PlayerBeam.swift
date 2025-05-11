@@ -6,6 +6,14 @@ struct PlayerBeam {
   let speed: Float
   private(set) var isDestroyed = false
 
+  var bounds: CF_Aabb {
+    cf_make_aabb_pos_w_h(
+      position,
+      Float(sprite.w),
+      Float(sprite.h)
+    )
+  }
+
   init(at position: CF_V2, speed: Float = 3) {
     self.position = position
     self.speed = speed
@@ -27,5 +35,9 @@ struct PlayerBeam {
     cf_draw_translate_v2(position)
     sprite.draw()
     cf_draw_pop()
+  }
+
+  mutating func collides(with other: Enemy) -> Bool {
+    cf_aabb_to_aabb(self.bounds, other.bounds)
   }
 }

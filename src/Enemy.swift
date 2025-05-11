@@ -18,6 +18,14 @@ struct Enemy {
   private(set) var isDestroyed = false
   let type: EnemyType
 
+  var bounds: CF_Aabb {
+    cf_make_aabb_pos_w_h(
+      position,
+      Float(sprite.w),
+      Float(sprite.h)
+    )
+  }
+
   init(at position: CF_V2, speed: Float = 0.1, type: EnemyType = .alan) {
     self.position = position
     self.speed = speed
