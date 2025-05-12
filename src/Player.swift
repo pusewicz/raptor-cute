@@ -1,62 +1,76 @@
 import CCute
 
+let maxShootCooldown = 8
+
+enum MoveDirection {
+  case left
+  case right
+  case up
+  case down
+}
+
 struct Player {
   private(set) var position: CF_V2
   private var shipSprite: CF_Sprite
   private var boosterSprite: CF_Sprite
-  private(set) var didShoot = false
   private var shootCooldown = 0
+  private var velocity: CF_V2
 
   init() {
-    position = CF_V2(x: 0, y: -42)
-    shipSprite = CF_Sprite.fromAseprite(path: "content/player_ship.aseprite")
-    boosterSprite = CF_Sprite.fromAseprite(path: "content/boosters.aseprite")
+    self.position = CF_V2(x: 0, y: -42)
+    self.shipSprite = CF_Sprite.fromAseprite(path: "content/player_ship.aseprite")
+    self.boosterSprite = CF_Sprite.fromAseprite(path: "content/boosters.aseprite")
+    self.velocity = CF_V2(x: 0, y: 0)
 
     shipSprite.play(animation: "default")
   }
 
+  mutating func move(_ direction: MoveDirection) {
+    switch direction {
+    case .left: self.velocity.x = -1
+    case .right: self.velocity.x = 1
+    case .up: self.velocity.y = 1
+    case .down: self.velocity.y = -1
+    }
+  }
+
+  func canShoot() -> Bool {
+    shootCooldown == 0
+  }
+
+  func didShoot() -> Bool {
+    shootCooldown == maxShootCooldown
+  }
+
+  mutating func shoot() {
+    shootCooldown = maxShootCooldown
+  }
+
   mutating func update() {
-    didShoot = false
-    shipSprite.play(animation: "default")
-
-    if cf_key_down(CF_KEY_W) {  // Move up
-      position.y += 1
-    }
-    if cf_key_down(CF_KEY_S) {  // Move down
-      position.y -= 1
-    }
-
-    if cf_key_down(CF_KEY_A) {  // Move left
-      position.x -= 1
-      shipSprite.play(animation: "left")
-      if !boosterSprite.isPlaying(animation: "left") {
-        boosterSprite.play(animation: "left")
-      }
-    }
-
-    if cf_key_down(CF_KEY_D) {  // Move right
-      position.x += 1
+    if self.velocity.x > 0 {
       shipSprite.play(animation: "right")
       if !boosterSprite.isPlaying(animation: "right") {
         boosterSprite.play(animation: "right")
       }
-    }
-
-    if cf_key_down(CF_KEY_SPACE) && shootCooldown == 0 {
-      didShoot = true
-      shootCooldown = 8
-    }
-
-    if shootCooldown > 0 {
-      shootCooldown -= 1
-    }
-
-    if !(cf_key_down(CF_KEY_W) || cf_key_down(CF_KEY_S) || cf_key_down(CF_KEY_A)
-      || cf_key_down(CF_KEY_D))
-    {
+    } else if self.velocity.x < 0 {
+      shipSprite.play(animation: "left")
+      if !boosterSprite.isPlaying(animation: "left") {
+        boosterSprite.play(animation: "left")
+      }
+    } else {
+      shipSprite.play(animation: "default")
       if !boosterSprite.isPlaying(animation: "idle") {
         boosterSprite.play(animation: "idle")
       }
+    }
+
+    self.position.x += self.velocity.x
+    self.position.y += self.velocity.y
+    self.velocity.x = 0
+    self.velocity.y = 0
+
+    if shootCooldown > 0 {
+      shootCooldown -= 1
     }
 
     boosterSprite.update()

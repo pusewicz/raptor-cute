@@ -46,16 +46,20 @@ class Game {
 
     state = State(player: Player())
 
-    /// Add 3 enemies in a row
-    for i in [-1, 0, 1] {
-      let position = CF_V2(x: Float(i) * (16 + 4), y: 64)
-      state.enemies.append(Enemy(at: position))
-    }
-
+    spawnMonsters()
     background = CF_Sprite.fromAseprite(path: "content/background.aseprite")
     fireSound = CF_Audio.fromOGG(path: "content/fire_6.ogg")
 
     Game.current = self
+  }
+
+  func spawnMonsters(amount: Int32 = 3) {
+    let halfWidth = canvasWidth / 2
+    let offset = halfWidth / amount
+    for i in 0..<amount {
+      let position = CF_V2(x: (Float(i) * Float(16 + 4)) - Float(offset), y: 64)
+      state.enemies.append(Enemy(at: position))
+    }
   }
 
   func mountContentDirectory(as dest: String) {
@@ -99,13 +103,37 @@ class Game {
   }
 
   func updatePlayer() {
-    state.player.update()
+    inputPlayer()
 
-    if state.player.didShoot {
+    if state.player.didShoot() {
       let position = CF_V2(x: state.player.position.x, y: state.player.position.y + 2)
       state.playerBeams.append(PlayerBeam(at: position))
 
       cf_play_sound(fireSound, cf_sound_params_defaults())
+    }
+
+    state.player.update()
+  }
+
+  func inputPlayer() {
+
+    if cf_key_down(CF_KEY_W) {  // Move up
+      state.player.move(.up)
+    }
+    if cf_key_down(CF_KEY_S) {  // Move down
+      state.player.move(.down)
+    }
+
+    if cf_key_down(CF_KEY_A) {  // Move left
+      state.player.move(.left)
+    }
+
+    if cf_key_down(CF_KEY_D) {  // Move right
+      state.player.move(.right)
+    }
+
+    if cf_key_down(CF_KEY_SPACE) && state.player.canShoot() {
+      state.player.shoot()
     }
   }
 
