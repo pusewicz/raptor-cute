@@ -35,4 +35,10 @@ target_include_directories(${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:${CMAKE_CURR
 target_link_libraries(${PROJECT_NAME} cute)
 
 # Copy content directory to build directory during build
-file(COPY content DESTINATION ${CMAKE_BINARY_DIR})
+add_custom_target(copy_data
+  COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different
+  "${CMAKE_CURRENT_SOURCE_DIR}/content/"
+  "$<TARGET_FILE_DIR:${PROJECT_NAME}>/content"
+  COMMENT "Copying content"
+)
+add_dependencies(${PROJECT_NAME} copy_data)
