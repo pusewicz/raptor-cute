@@ -2,11 +2,16 @@ import CCute
 
 enum EnemyType: CustomStringConvertible {
   case alan
+  case bonBon
+  case lips
 
   var description: String {
     switch self {
     case .alan:
       return "alan"
+    case .alan: return "alan"
+    case .bonBon: return "bon_bon"
+    case .lips: return "lips"
     }
   }
 }
