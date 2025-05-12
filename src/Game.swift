@@ -9,6 +9,7 @@ class Game {
 
   var state: State!
   var background: CF_Sprite!
+  var fireSound: CF_Audio!
 
   /// Screen width and height
   var width: Int32 = 0
@@ -52,6 +53,7 @@ class Game {
     }
 
     background = CF_Sprite.fromAseprite(path: "content/background.aseprite")
+    fireSound = CF_Audio.fromOGG(path: "content/fire_6.ogg")
 
     Game.current = self
   }
@@ -102,6 +104,8 @@ class Game {
     if state.player.didShoot {
       let position = CF_V2(x: state.player.position.x, y: state.player.position.y + 2)
       state.playerBeams.append(PlayerBeam(at: position))
+
+      cf_play_sound(fireSound, cf_sound_params_defaults())
     }
   }
 
@@ -175,6 +179,7 @@ class Game {
   }
 
   deinit {
+    cf_audio_destroy(fireSound)
     cf_destroy_app()
   }
 }
