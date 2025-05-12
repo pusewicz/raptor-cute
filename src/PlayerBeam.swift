@@ -7,11 +7,12 @@ struct PlayerBeam {
   private(set) var isDestroyed = false
 
   var bounds: CF_Aabb {
-    cf_make_aabb_pos_w_h(
-      position,
-      Float(sprite.w),
-      Float(sprite.h)
-    )
+    cf_expand_aabb_f(
+      cf_make_aabb_pos_w_h(
+        position,
+        Float(sprite.w),
+        Float(sprite.h)
+      ), -3.0)
   }
 
   init(at position: CF_V2, speed: Float = 3) {

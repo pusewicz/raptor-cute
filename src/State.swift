@@ -3,4 +3,5 @@ struct State {
   var playerBeams: [PlayerBeam] = []
   var enemies: [Enemy] = []
   var explosions: [Explosion] = []
+  var debug = false
 }

@@ -13,6 +13,14 @@ enum EnemyType: CustomStringConvertible, CaseIterable {
     }
   }
 
+  var boundsFactor: CF_V2 {
+    switch self {
+    case .alan: return CF_V2(x: 0, y: -1)
+    case .bonBon: return CF_V2(x: -1, y: -4)
+    case .lips: return CF_V2(x: -2, y: -3)
+    }
+  }
+
   /// Fetch random enemy type
   static func random() -> EnemyType {
     let allTypes = EnemyType.allCases
@@ -29,11 +37,12 @@ struct Enemy {
   let type: EnemyType
 
   var bounds: CF_Aabb {
-    cf_make_aabb_pos_w_h(
-      position,
-      Float(sprite.w),
-      Float(sprite.h)
-    )
+    cf_expand_aabb(
+      cf_make_aabb_pos_w_h(
+        position,
+        Float(sprite.w),
+        Float(sprite.h)
+      ), type.boundsFactor)
   }
 
   init(at position: CF_V2, speed: Float = 0.1, type: EnemyType = EnemyType.random()) {

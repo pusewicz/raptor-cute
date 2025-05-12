@@ -106,8 +106,13 @@ class Game {
 
     background.update()
 
+    var name = "Raptor"
+    if state.debug {
+      name = "Raptor (Debug)"
+    }
+
     let title =
-      "Raptor - \(state.player.position.x), \(state.player.position.y), Enemies: \(state.enemies.count), Beams: \(state.playerBeams.count), Explosions: \(state.explosions.count)"
+      "\(name) - \(state.player.position.x), \(state.player.position.y), Enemies: \(state.enemies.count), Beams: \(state.playerBeams.count), Explosions: \(state.explosions.count)"
     cf_app_set_title(title)
   }
 
@@ -125,6 +130,9 @@ class Game {
   }
 
   func inputPlayer() {
+    if cf_key_just_pressed(CF_KEY_G) {
+      state.debug = !state.debug
+    }
 
     if cf_key_down(CF_KEY_W) {  // Move up
       state.player.move(.up)
@@ -200,8 +208,25 @@ class Game {
     renderExplosions()
     state.player.draw()
 
+    if state.debug {
+      renderDebug()
+    }
+
     cf_draw_pop()
+
     cf_app_draw_onto_screen(true)
+  }
+
+  func renderDebug() {
+    let red = cf_color_red()
+    cf_draw_push_color(red)
+    for enemy in state.enemies {
+      cf_draw_box(enemy.bounds, 0.1, 0)
+    }
+    for beam in state.playerBeams {
+      cf_draw_box(beam.bounds, 0.1, 0)
+    }
+    cf_draw_pop_color()
   }
 
   func renderBackground() {
