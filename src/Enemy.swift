@@ -1,18 +1,23 @@
 import CCute
 
-enum EnemyType: CustomStringConvertible {
+enum EnemyType: CustomStringConvertible, CaseIterable {
   case alan
   case bonBon
   case lips
 
   var description: String {
     switch self {
-    case .alan:
-      return "alan"
     case .alan: return "alan"
     case .bonBon: return "bon_bon"
     case .lips: return "lips"
     }
+  }
+
+  /// Fetch random enemy type
+  static func random() -> EnemyType {
+    let allTypes = EnemyType.allCases
+    let randomIndex = Int(arc4random_uniform(UInt32(allTypes.count)))
+    return allTypes[randomIndex]
   }
 }
 
@@ -31,7 +36,7 @@ struct Enemy {
     )
   }
 
-  init(at position: CF_V2, speed: Float = 0.1, type: EnemyType = .alan) {
+  init(at position: CF_V2, speed: Float = 0.1, type: EnemyType = EnemyType.random()) {
     self.position = position
     self.speed = speed
     self.sprite = CF_Sprite.fromAseprite(path: "content/\(type.description).aseprite")
