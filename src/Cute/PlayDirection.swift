@@ -1,6 +1,6 @@
 import CCute
 
-extension CF_PlayDirection: CustomStringConvertible {
+extension CF_PlayDirection: @retroactive CustomStringConvertible {
   public var description: String {
     switch self {
     case CF_PLAY_DIRECTION_FORWARDS:
