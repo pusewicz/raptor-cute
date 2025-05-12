@@ -45,8 +45,7 @@ class Game {
     mountContentDirectory(as: "content/")
 
     state = State(player: Player())
-
-    spawnMonsters()
+    spawnMonsters(amount: 2)
     background = CF_Sprite.fromAseprite(path: "content/background.aseprite")
     fireSound = CF_Audio.fromOGG(path: "content/fire_6.ogg")
 
@@ -57,7 +56,8 @@ class Game {
     let halfWidth = canvasWidth / 2
     let offset = halfWidth / amount
     for i in 0..<amount {
-      let position = CF_V2(x: (Float(i) * Float(16 + 4)) - Float(offset), y: 64)
+      let position = CF_V2(
+        x: (Float(i) * Float(16 + 4)) - Float(offset), y: Float(canvasHeight / 2))
       state.enemies.append(Enemy(at: position))
     }
   }
@@ -83,9 +83,15 @@ class Game {
   func update() {
     cf_app_get_size(&width, &height)
 
+    if cf_on_interval(4, 0) {
+      let randomNumber = Int32.random(in: 3...12)
+      spawnMonsters(amount: randomNumber)
+    }
+
     updatePlayer()
     updatePlayerBeams()
     updateEnemies()
+    updateExplosions()
 
     checkCollisions()
 
@@ -95,10 +101,13 @@ class Game {
     // Remove destroyed enemies
     state.enemies.removeAll(where: { $0.isDestroyed })
 
+    // Remove finished explosions
+    state.explosions.removeAll(where: { $0.isDestroyed })
+
     background.update()
 
     let title =
-      "Raptor - \(state.player.position.x), \(state.player.position.y), Enemies: \(state.enemies.count), Beams: \(state.playerBeams.count)"
+      "Raptor - \(state.player.position.x), \(state.player.position.y), Enemies: \(state.enemies.count), Beams: \(state.playerBeams.count), Explosions: \(state.explosions.count)"
     cf_app_set_title(title)
   }
 
@@ -159,12 +168,23 @@ class Game {
     }
   }
 
+  func updateExplosions() {
+    for i in state.explosions.indices {
+      state.explosions[i].update()
+    }
+  }
+
   func checkCollisions() {
     for i in state.playerBeams.indices {
       for j in state.enemies.indices {
         if state.playerBeams[i].collides(with: state.enemies[j]) {
           state.playerBeams[i].destroy()
           state.enemies[j].destroy()
+
+          /// Add an explosion
+          state.explosions.append(Explosion(at: state.enemies[j].position))
+
+          //cf_play_sound(explosionSound, cf_sound_params_defaults())
         }
       }
     }
@@ -177,6 +197,7 @@ class Game {
     renderBackground()
     renderPlayerBeams()
     renderEnemies()
+    renderExplosions()
     state.player.draw()
 
     cf_draw_pop()
@@ -203,6 +224,12 @@ class Game {
   func renderEnemies() {
     for i in state.enemies.indices {
       state.enemies[i].draw()
+    }
+  }
+
+  func renderExplosions() {
+    for i in state.explosions.indices {
+      state.explosions[i].draw()
     }
   }
 

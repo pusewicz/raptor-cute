@@ -73,6 +73,9 @@ extension CF_Sprite {
 
   /// Reload a sprite's resources
   mutating func reload() -> CF_Sprite { cf_sprite_reload(&self) }
+
+  /// Returns true if the animation will loop around and finish if cf_sprite_update is called.
+  mutating func willFinish() -> Bool { cf_sprite_will_finish(&self) }
 }
 
 // MARK: - Convenience Initializers and Factory Methods
