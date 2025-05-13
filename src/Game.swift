@@ -1,4 +1,5 @@
 import CCute
+import CPicoECS
 import Foundation
 
 class Game {
@@ -26,6 +27,9 @@ class Game {
 
   init() {
     scaleV2 = CF_V2(x: Float(scale), y: Float(scale))
+
+    let ecs = ECS()
+    let entity = ecs.createEntity()
 
     let options: CF_AppOptionFlags = Int32(CF_APP_OPTIONS_WINDOW_POS_CENTERED_BIT.rawValue)
 
