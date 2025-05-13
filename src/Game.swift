@@ -1,6 +1,5 @@
 import CCute
 import CPicoECS
-import Foundation
 
 class Game {
   nonisolated(unsafe) static weak var current: Game!
@@ -116,7 +115,7 @@ class Game {
       name = "Raptor (Debug)"
     }
 
-    let fps = String(format: "%.2f", cf_app_get_smoothed_framerate())
+    let fps = cf_app_get_smoothed_framerate().rounded()
     let title =
       "\(name) - \(state.player.position.x), \(state.player.position.y), Enemies: \(state.enemies.count), Beams: \(state.playerBeams.count), Explosions: \(state.explosions.count), FPS: \(fps)"
     cf_app_set_title(title)
