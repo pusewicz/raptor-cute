@@ -3,5 +3,5 @@
 set -e
 
 cd build
-ninja
+cmake --build .
 ./raptor

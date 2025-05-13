@@ -1,7 +1,7 @@
 [
   {
     "label": "Run Raptor",
-    "command": "cmake -DCMAKE_BUILD_TYPE=Debug --build build && ./build/raptor",
+    "command": "cmake --build build && ./build/raptor",
     "use_new_terminal": false,
     "allow_concurrent_runs": false,
     "reveal": "always",
