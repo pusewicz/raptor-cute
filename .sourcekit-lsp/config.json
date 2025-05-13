@@ -1,7 +1,8 @@
 {
   "$schema": "https://raw.githubusercontent.com/swiftlang/sourcekit-lsp/refs/heads/main/config.schema.json",
-  "backgroundIndexing": false,
+  "backgroundIndexing": true,
   "compilationDatabase": {
     "searchPaths": ["build"]
-  }
+  },
+  "experimentalFeatures": ["on-type-formatting"]
 }
