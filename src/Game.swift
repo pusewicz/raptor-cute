@@ -1,5 +1,22 @@
-import CCute
+@preconcurrency import CCute
 import CPicoECS
+
+typealias Position = CF_V2
+
+class PlayerSystem: ECS.System {
+  func update(ecs: ECS, entities: [ECS.EntityID], deltaTime: Float) -> ECS.ReturnCode {
+    guard let game = Game.current else {
+      return -1
+    }
+
+    let screenWidth = game.canvasWidth
+
+    print(
+      "Updating player system with \(entities.count) dt \(deltaTime == CF_DELTA_TIME) and deltaTime \(deltaTime) and screenWidth \(screenWidth)"
+    )
+    return 0
+  }
+}
 
 class Game {
   nonisolated(unsafe) static weak var current: Game!
@@ -16,6 +33,9 @@ class Game {
   var width: Int32 = 0
   var height: Int32 = 0
 
+  var ecs: ECS!
+  var playerSystemId: ECS.SystemID!
+
   var canvasWidth: Int32 {
     return width / scale
   }
@@ -25,10 +45,8 @@ class Game {
   }
 
   init() {
-    scaleV2 = CF_V2(x: Float(scale), y: Float(scale))
-
-    let ecs = ECS()
-    let entity = ecs.createEntity()
+    self.scaleV2 = CF_V2(x: Float(scale), y: Float(scale))
+    self.ecs = ECS(entityCount: 1024)
 
     let options: CF_AppOptionFlags = Int32(CF_APP_OPTIONS_WINDOW_POS_CENTERED_BIT.rawValue)
 
@@ -52,6 +70,10 @@ class Game {
     spawnMonsters(amount: 2)
     background = CF_Sprite.fromAseprite(path: "content/background.aseprite")
     fireSound = CF_Audio.fromOGG(path: "content/fire_6.ogg")
+    ecs.registerComponent(Position.self)
+    ecs.registerComponent(Player.self)
+
+    self.playerSystemId = ecs.registerSystem(PlayerSystem())
 
     Game.current = self
   }
@@ -86,6 +108,8 @@ class Game {
 
   func update() {
     cf_app_get_size(&width, &height)
+
+    ecs.updateSystems(deltaTime: CF_DELTA_TIME)
 
     if cf_on_interval(4, 0) {
       let randomNumber = Int32.random(in: 3...12)
