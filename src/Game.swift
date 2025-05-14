@@ -1,5 +1,4 @@
 @preconcurrency import CCute
-import CPicoECS
 
 class Game {
   nonisolated(unsafe) static weak var current: Game!
@@ -16,9 +15,6 @@ class Game {
   var width: Int32 = 0
   var height: Int32 = 0
 
-  var ecs: ECS!
-  var playerSystemId: ECS.SystemID!
-
   var canvasWidth: Int32 {
     return width / scale
   }
@@ -29,7 +25,6 @@ class Game {
 
   init() {
     self.scaleV2 = CF_V2(x: Float(scale), y: Float(scale))
-    self.ecs = ECS(entityCount: 1024)
 
     let options: CF_AppOptionFlags = Int32(CF_APP_OPTIONS_WINDOW_POS_CENTERED_BIT.rawValue)
 
@@ -53,11 +48,6 @@ class Game {
     spawnMonsters(amount: 2)
     background = CF_Sprite.fromAseprite(path: "content/background.aseprite")
     fireSound = CF_Audio.fromOGG(path: "content/fire_6.ogg")
-
-    ecs.registerComponent(PositionComponent.self)
-
-    self.playerSystemId = ecs.registerSystem(PlayerSystem())
-    ecs.requireComponent(PlayerSystem.self, PositionComponent.self)
 
     Game.current = self
   }
@@ -92,8 +82,6 @@ class Game {
 
   func update() {
     cf_app_get_size(&width, &height)
-
-    ecs.updateSystems(deltaTime: CF_DELTA_TIME)
 
     if cf_on_interval(4, 0) {
       let randomNumber = Int32.random(in: 3...12)

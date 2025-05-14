@@ -43,10 +43,8 @@ add_executable(
   ${SOURCES}
 )
 
-add_subdirectory("third_party/pico_headers")
-
 target_include_directories(${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
-target_link_libraries(${PROJECT_NAME} PRIVATE cute pico_headers)
+target_link_libraries(${PROJECT_NAME} PRIVATE cute)
 target_compile_options(${PROJECT_NAME} PRIVATE
   $<$<COMPILE_LANGUAGE:Swift>:-color-diagnostics>
 )
