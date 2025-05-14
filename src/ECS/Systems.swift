@@ -1,53 +1,5 @@
 import CPicoECS
 
-class ECS {
-  public typealias ReturnCode = ecs_ret_t
-  public typealias EntityID = ecs_id_t
-  public typealias ComponentID = ecs_id_t
-  public typealias SystemID = ecs_id_t
-  public typealias TimeInterval = Float
-
-  private var ecs: OpaquePointer
-  nonisolated(unsafe) static weak var current: ECS!
-
-  /// Hashmap of systems
-  private var systems: [SystemID: System] = [:]
-
-  /// Initialize a new ECS instance
-  /// - Parameter entityCount: Initial capacity for pooled entities
-  init(entityCount: Int = 1024) {
-    self.ecs = ecs_new(entityCount, nil)
-
-    ECS.current = self
-  }
-
-  deinit {
-    ecs_free(ecs)
-  }
-
-  /// Reset the ECS instance, removing all entities while preserving systems and components
-  public func reset() {
-    ecs_reset(ecs)
-  }
-}
-
-/// MARK: Entities
-extension ECS {
-  @discardableResult
-  public func createEntity() -> EntityID {
-    ecs_create(ecs)
-  }
-}
-
-/// MARK: Components
-extension ECS {
-  @discardableResult
-  public func registerComponent<T>(_ component: T.Type) -> ComponentID {
-    ecs_register_component(ecs, MemoryLayout<T>.size, nil, nil)
-  }
-}
-
-/// MARK: Systems
 extension ECS {
   private class SystemContext {
     let system: System
@@ -59,7 +11,7 @@ extension ECS {
     }
   }
 
-  protocol System {
+  public protocol System {
     @discardableResult
     func update(ecs: ECS, entities: [EntityID], deltaTime: TimeInterval) -> ReturnCode
   }
@@ -87,7 +39,7 @@ extension ECS {
     )
 
     // Store the system in the hashmap
-    systems[systemId] = system
+    systemIDs[String(describing: T.self)] = systemId
     return systemId
   }
 

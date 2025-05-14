@@ -1,23 +1,6 @@
 @preconcurrency import CCute
 import CPicoECS
 
-typealias Position = CF_V2
-
-class PlayerSystem: ECS.System {
-  func update(ecs: ECS, entities: [ECS.EntityID], deltaTime: Float) -> ECS.ReturnCode {
-    guard let game = Game.current else {
-      return -1
-    }
-
-    let screenWidth = game.canvasWidth
-
-    print(
-      "Updating player system with \(entities.count) dt \(deltaTime == CF_DELTA_TIME) and deltaTime \(deltaTime) and screenWidth \(screenWidth)"
-    )
-    return 0
-  }
-}
-
 class Game {
   nonisolated(unsafe) static weak var current: Game!
 
@@ -70,10 +53,11 @@ class Game {
     spawnMonsters(amount: 2)
     background = CF_Sprite.fromAseprite(path: "content/background.aseprite")
     fireSound = CF_Audio.fromOGG(path: "content/fire_6.ogg")
-    ecs.registerComponent(Position.self)
-    ecs.registerComponent(Player.self)
+
+    ecs.registerComponent(PositionComponent.self)
 
     self.playerSystemId = ecs.registerSystem(PlayerSystem())
+    ecs.requireComponent(PlayerSystem.self, PositionComponent.self)
 
     Game.current = self
   }
