@@ -8,6 +8,7 @@ add_executable(
   Player.swift
   PlayerBeam.swift
   State.swift
+  StarParticle.swift
   main.swift
 )
 

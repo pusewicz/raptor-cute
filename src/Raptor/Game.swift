@@ -24,6 +24,7 @@ class Game {
   }
 
   var drawCount: Int32 = 0
+  var stars: [StarParticle] = []
 
   init() {
     self.scaleV2 = CF_V2(x: Float(scale), y: Float(scale))
@@ -50,6 +51,11 @@ class Game {
     spawnMonsters(amount: 2)
     background = Background()
     fireSound = CF_Audio.fromOGG(path: "sounds/fire_6.ogg")
+
+    // Spawn stars
+    for _ in 0..<10 {
+      stars.append(makeStar())
+    }
 
     Game.current = self
   }
@@ -82,6 +88,10 @@ class Game {
     }
   }
 
+  func makeStar() -> StarParticle {
+    StarParticle(canvasWidth: Float(canvasWidth))
+  }
+
   func update() {
     cf_app_get_size(&width, &height)
 
@@ -90,10 +100,15 @@ class Game {
       spawnMonsters(amount: randomNumber)
     }
 
+    if cf_on_interval(1, 0) {
+      stars.append(makeStar())
+    }
+
     updatePlayer()
     updatePlayerBeams()
     updateEnemies()
     updateExplosions()
+    updateStars()
 
     checkCollisions()
 
@@ -185,6 +200,16 @@ class Game {
     }
   }
 
+  func updateStars() {
+    for i in stars.indices {
+      stars[i].update()
+      if stars[i].position.y < Float(-canvasHeight / 2) {
+        stars[i].destroy()
+      }
+    }
+    stars.removeAll(where: { $0.isDestroyed })
+  }
+
   func checkCollisions() {
     for i in state.playerBeams.indices {
       for j in state.enemies.indices {
@@ -210,6 +235,7 @@ class Game {
     renderEnemies()
     renderExplosions()
     state.player.draw()
+    renderStars()
 
     if state.debug {
       renderDebug()
@@ -218,6 +244,12 @@ class Game {
     cf_draw_pop()
 
     self.drawCount = cf_app_draw_onto_screen(true)
+  }
+
+  func renderStars() {
+    for i in stars.indices {
+      stars[i].draw()
+    }
   }
 
   func renderDebug() {
