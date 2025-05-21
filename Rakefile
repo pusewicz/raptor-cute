@@ -1,5 +1,8 @@
+require "rake/clean"
+
 BUILD_DIR = "build"
 ROOT_DIR = File.expand_path(File.dirname(__FILE__))
+CLOBBER.include(BUILD_DIR)
 
 directory BUILD_DIR do
   sh "cmake -S #{ROOT_DIR} -G Ninja -B #{BUILD_DIR} -DCMAKE_BUILD_TYPE=Debug"
