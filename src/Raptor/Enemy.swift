@@ -48,7 +48,7 @@ struct Enemy {
   init(at position: CF_V2, speed: Float = 0.1, type: EnemyType = EnemyType.random()) {
     self.position = position
     self.speed = speed
-    self.sprite = CF_Sprite.fromAseprite(path: "content/\(type.description).aseprite")
+    self.sprite = CF_Sprite.fromAseprite(path: "sprites/\(type.description).ase")
     self.type = type
   }
 

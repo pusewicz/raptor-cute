@@ -21,10 +21,10 @@ include(cmake/cute.cmake)
 add_subdirectory(src)
 
 # Copy content directory to build directory during build
-add_custom_target(copy_data
+add_custom_target(copy_assets
   COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different
-  "${CMAKE_CURRENT_SOURCE_DIR}/content/"
-  "$<TARGET_FILE_DIR:${PROJECT_NAME}>/content"
-  COMMENT "Copying content"
+  "${CMAKE_CURRENT_SOURCE_DIR}/assets/"
+  "$<TARGET_FILE_DIR:${PROJECT_NAME}>/assets"
+  COMMENT "Copying assets directory to build directory"
 )
-add_dependencies(${PROJECT_NAME} copy_data)
+add_dependencies(${PROJECT_NAME} copy_assets)

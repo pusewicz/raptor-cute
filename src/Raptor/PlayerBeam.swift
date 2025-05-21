@@ -18,7 +18,7 @@ struct PlayerBeam {
   init(at position: CF_V2, speed: Float = 3) {
     self.position = position
     self.speed = speed
-    self.sprite = CF_Sprite.fromAseprite(path: "content/player_beam.aseprite")
+    self.sprite = CF_Sprite.fromAseprite(path: "sprites/player_beam.ase")
   }
 
   // Updates the beam's position

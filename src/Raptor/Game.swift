@@ -42,12 +42,12 @@ class Game {
     cf_set_fixed_timestep_max_updates(5)
     cf_app_get_size(&width, &height)
 
-    mountContentDirectory(as: "content/")
+    mountAssetsDirectory(as: "/")
 
     state = State(player: Player())
     spawnMonsters(amount: 2)
-    background = CF_Sprite.fromAseprite(path: "content/background.aseprite")
-    fireSound = CF_Audio.fromOGG(path: "content/fire_6.ogg")
+    background = CF_Sprite.fromAseprite(path: "sprites/background.ase")
+    fireSound = CF_Audio.fromOGG(path: "sounds/fire_6.ogg")
 
     Game.current = self
   }
@@ -62,12 +62,12 @@ class Game {
     }
   }
 
-  func mountContentDirectory(as dest: String) {
+  func mountAssetsDirectory(as dest: String) {
     guard let base = cf_fs_get_base_directory() else {
       fatalError("Could not get base directoy")
     }
     var path = String(cString: base)
-    path += "content"
+    path += "assets"
     cf_fs_mount(path, dest, false)
   }
 

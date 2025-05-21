@@ -7,7 +7,7 @@ struct Explosion {
 
   init(at position: CF_V2) {
     self.position = position
-    self.sprite = CF_Sprite.fromAseprite(path: "content/explosion.aseprite")
+    self.sprite = CF_Sprite.fromAseprite(path: "sprites/explosion.ase")
   }
 
   mutating func update() {
