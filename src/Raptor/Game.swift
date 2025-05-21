@@ -23,6 +23,8 @@ class Game {
     return height / scale
   }
 
+  var drawCount: Int32 = 0
+
   init() {
     self.scaleV2 = CF_V2(x: Float(scale), y: Float(scale))
 
@@ -113,7 +115,7 @@ class Game {
 
     let fps = cf_app_get_smoothed_framerate().rounded()
     let title =
-      "\(name) - \(state.player.position.x), \(state.player.position.y), Enemies: \(state.enemies.count), Beams: \(state.playerBeams.count), Explosions: \(state.explosions.count), FPS: \(fps)"
+      "\(name) - \(state.player.position.x), \(state.player.position.y), Enemies: \(state.enemies.count), Beams: \(state.playerBeams.count), Explosions: \(state.explosions.count), FPS: \(fps), Draws: \(drawCount)"
     cf_app_set_title(title)
   }
 
@@ -215,7 +217,7 @@ class Game {
 
     cf_draw_pop()
 
-    cf_app_draw_onto_screen(true)
+    self.drawCount = cf_app_draw_onto_screen(true)
   }
 
   func renderDebug() {
