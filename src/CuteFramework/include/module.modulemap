@@ -1,4 +1,4 @@
-module CCute [extern_c] {
+module CCuteFramework [extern_c] {
   header "cute.shim.h"
   export *
 }

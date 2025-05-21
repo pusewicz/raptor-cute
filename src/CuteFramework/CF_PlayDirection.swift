@@ -1,4 +1,4 @@
-import CCute
+import CCuteFramework
 
 extension CF_PlayDirection: @retroactive CustomStringConvertible {
   public var description: String {

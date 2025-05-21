@@ -1,4 +1,4 @@
-import CCute
+import CuteFramework
 
 struct PlayerBeam {
   private(set) var position: CF_V2

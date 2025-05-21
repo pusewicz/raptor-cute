@@ -1,4 +1,4 @@
-@preconcurrency import CCute
+import CuteFramework
 
 class Game {
   nonisolated(unsafe) static weak var current: Game!

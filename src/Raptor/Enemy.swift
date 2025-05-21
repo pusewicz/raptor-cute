@@ -1,4 +1,4 @@
-import CCute
+import CuteFramework
 
 enum EnemyType: CustomStringConvertible, CaseIterable {
   case alan

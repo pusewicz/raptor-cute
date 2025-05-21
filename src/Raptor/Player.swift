@@ -1,4 +1,4 @@
-import CCute
+import CuteFramework
 
 let maxShootCooldown = 8
 

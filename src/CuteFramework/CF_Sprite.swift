@@ -1,4 +1,4 @@
-import CCute
+import CCuteFramework
 
 // MARK: - CF_Sprite Swift Extension
 extension CF_Sprite {
@@ -38,44 +38,44 @@ extension CF_Sprite {
   }
 
   /// Update the sprite's animation
-  mutating func update() { cf_sprite_update(&self) }
+  public mutating func update() { cf_sprite_update(&self) }
 
   /// Reset the currently playing animation and unpause it
-  mutating func reset() { cf_sprite_reset(&self) }
+  public mutating func reset() { cf_sprite_reset(&self) }
 
   /// Play a specific animation from the beginning
-  mutating func play(animation: String) {
+  public mutating func play(animation: String) {
     cf_sprite_play(&self, animation)
   }
 
   /// Check if a specific animation is currently playing
-  mutating func isPlaying(animation: String) -> Bool {
+  public mutating func isPlaying(animation: String) -> Bool {
     cf_sprite_is_playing(&self, animation)
   }
 
   /// Pause the sprite's animation
-  mutating func pause() { cf_sprite_pause(&self) }
+  public mutating func pause() { cf_sprite_pause(&self) }
 
   /// Unpause the sprite's animation
-  mutating func unpause() { cf_sprite_unpause(&self) }
+  public mutating func unpause() { cf_sprite_unpause(&self) }
 
   /// Toggle the sprite's paused state
-  mutating func togglePause() { cf_sprite_toggle_pause(&self) }
+  public mutating func togglePause() { cf_sprite_toggle_pause(&self) }
 
   /// Flip the sprite on the x-axis
-  mutating func flipX() { cf_sprite_flip_x(&self) }
+  public mutating func flipX() { cf_sprite_flip_x(&self) }
 
   /// Flip the sprite on the y-axis
-  mutating func flipY() { cf_sprite_flip_y(&self) }
+  public mutating func flipY() { cf_sprite_flip_y(&self) }
 
   /// Draw the sprite
-  mutating func draw() { cf_draw_sprite(&self) }
+  public mutating func draw() { cf_draw_sprite(&self) }
 
   /// Reload a sprite's resources
-  mutating func reload() -> CF_Sprite { cf_sprite_reload(&self) }
+  public mutating func reload() -> CF_Sprite { cf_sprite_reload(&self) }
 
   /// Returns true if the animation will loop around and finish if cf_sprite_update is called.
-  mutating func willFinish() -> Bool { cf_sprite_will_finish(&self) }
+  public mutating func willFinish() -> Bool { cf_sprite_will_finish(&self) }
 }
 
 // MARK: - Convenience Initializers and Factory Methods
@@ -97,12 +97,12 @@ extension CF_Sprite {
   }
 
   /// Create a sprite from an Aseprite file
-  static func fromAseprite(path: String) -> CF_Sprite {
+  public static func fromAseprite(path: String) -> CF_Sprite {
     return cf_make_sprite(path)
   }
 
   /// Create a demo sprite for testing
-  static func makeDemo() -> CF_Sprite {
+  public static func makeDemo() -> CF_Sprite {
     return cf_make_demo_sprite()
   }
 }
