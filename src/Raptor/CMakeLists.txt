@@ -1,9 +1,13 @@
 # Raptor
-file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "*.swift")
-
 add_executable(
   ${PROJECT_NAME}
-  ${SOURCES}
+  Enemy.swift
+  Explosion.swift
+  Game.swift
+  Player.swift
+  PlayerBeam.swift
+  State.swift
+  main.swift
 )
 
 # TODO: Link as a static library for Release build
