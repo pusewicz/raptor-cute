@@ -8,7 +8,7 @@ class Game {
   let scaleV2: CF_V2
 
   var state: State!
-  var background: CF_Sprite!
+  var background: Background!
   var fireSound: CF_Audio!
 
   /// Screen width and height
@@ -46,7 +46,7 @@ class Game {
 
     state = State(player: Player())
     spawnMonsters(amount: 2)
-    background = CF_Sprite.fromAseprite(path: "sprites/background.ase")
+    background = Background()
     fireSound = CF_Audio.fromOGG(path: "sounds/fire_6.ogg")
 
     Game.current = self
@@ -231,14 +231,7 @@ class Game {
   }
 
   func renderBackground() {
-    for x in [-1, 0, 1] {
-      for y in [-1, 0, 1] {
-        cf_draw_push()
-        cf_draw_translate(Float(64 * x), Float(64 * y))
-        background.draw()
-        cf_draw_pop()
-      }
-    }
+    background.draw()
   }
 
   func renderPlayerBeams() {

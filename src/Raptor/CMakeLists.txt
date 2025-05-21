@@ -1,6 +1,7 @@
 # Raptor
 add_executable(
   ${PROJECT_NAME}
+  Background.swift
   Enemy.swift
   Explosion.swift
   Game.swift
