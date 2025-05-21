@@ -10,7 +10,7 @@ task :make => BUILD_DIR do
 end
 
 task run: :make do
-  exec "#{BUILD_DIR}/raptor"
+  sh "cd #{BUILD_DIR} && ./raptor"
 end
 
 task default: :run
