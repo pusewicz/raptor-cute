@@ -5,6 +5,8 @@ add_executable(
   Enemy.swift
   Explosion.swift
   Game.swift
+  Game+Update.swift
+  Game+Render.swift
   Player.swift
   PlayerBeam.swift
   State.swift

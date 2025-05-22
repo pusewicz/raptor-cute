@@ -109,6 +109,7 @@ class Game {
     updateEnemies()
     updateExplosions()
     updateStars()
+    background.update()
 
     checkCollisions()
 
@@ -121,8 +122,6 @@ class Game {
     // Remove finished explosions
     state.explosions.removeAll(where: { $0.isDestroyed })
 
-    background.update()
-
     var name = "Raptor"
     if state.debug {
       name = "Raptor (Debug)"
@@ -132,19 +131,6 @@ class Game {
     let title =
       "\(name) - \(state.player.position.x), \(state.player.position.y), Enemies: \(state.enemies.count), Beams: \(state.playerBeams.count), Explosions: \(state.explosions.count), FPS: \(fps), Draws: \(drawCount)"
     cf_app_set_title(title)
-  }
-
-  func updatePlayer() {
-    inputPlayer()
-
-    if state.player.didShoot() {
-      let position = CF_V2(x: state.player.position.x, y: state.player.position.y + 2)
-      state.playerBeams.append(PlayerBeam(at: position))
-
-      cf_play_sound(fireSound, cf_sound_params_defaults())
-    }
-
-    state.player.update()
   }
 
   func inputPlayer() {
@@ -170,44 +156,6 @@ class Game {
     if cf_key_down(CF_KEY_SPACE) && state.player.canShoot() {
       state.player.shoot()
     }
-  }
-
-  func updatePlayerBeams() {
-    for i in state.playerBeams.indices {
-      state.playerBeams[i].update()
-
-      // Mark beam as destroyed when out of bounds
-      if state.playerBeams[i].position.y > Float(canvasHeight / 2) + 8 {
-        state.playerBeams[i].destroy()
-      }
-    }
-  }
-
-  func updateEnemies() {
-    for i in state.enemies.indices {
-      state.enemies[i].update()
-
-      // Mark enemy as destroyed when out of bounds
-      if state.enemies[i].position.y < Float(-canvasHeight / 2) - 8 {
-        state.enemies[i].destroy()
-      }
-    }
-  }
-
-  func updateExplosions() {
-    for i in state.explosions.indices {
-      state.explosions[i].update()
-    }
-  }
-
-  func updateStars() {
-    for i in stars.indices {
-      stars[i].update()
-      if stars[i].position.y < Float(-canvasHeight / 2) {
-        stars[i].destroy()
-      }
-    }
-    stars.removeAll(where: { $0.isDestroyed })
   }
 
   func checkCollisions() {
@@ -244,46 +192,6 @@ class Game {
     cf_draw_pop()
 
     self.drawCount = cf_app_draw_onto_screen(true)
-  }
-
-  func renderStars() {
-    for i in stars.indices {
-      stars[i].draw()
-    }
-  }
-
-  func renderDebug() {
-    let red = cf_color_red()
-    cf_draw_push_color(red)
-    for enemy in state.enemies {
-      cf_draw_box(enemy.bounds, 0.1, 0)
-    }
-    for beam in state.playerBeams {
-      cf_draw_box(beam.bounds, 0.1, 0)
-    }
-    cf_draw_pop_color()
-  }
-
-  func renderBackground() {
-    background.draw()
-  }
-
-  func renderPlayerBeams() {
-    for i in state.playerBeams.indices {
-      state.playerBeams[i].draw()
-    }
-  }
-
-  func renderEnemies() {
-    for i in state.enemies.indices {
-      state.enemies[i].draw()
-    }
-  }
-
-  func renderExplosions() {
-    for i in state.explosions.indices {
-      state.explosions[i].draw()
-    }
   }
 
   deinit {
