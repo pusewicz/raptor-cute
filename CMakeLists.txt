@@ -13,6 +13,10 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_Swift_LANGUAGE_VERSION ${SWIFT_VERSION})
 set(CMAKE_MACOSX_RPATH YES)
 
+add_compile_options(
+    $<$<COMPILE_LANGUAGE:Swift>:-color-diagnostics>
+)
+
 # Make sure all binaries are placed into the same build folder.
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
