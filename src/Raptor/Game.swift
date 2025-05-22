@@ -10,6 +10,7 @@ class Game {
   var state: State!
   var background: Background!
   var fireSound: CF_Audio!
+  var explosionSound: CF_Audio!
   var music: CF_Audio!
 
   /// Screen width and height
@@ -52,6 +53,7 @@ class Game {
     spawnMonsters(amount: 2)
     background = Background()
     fireSound = CF_Audio.fromOGG(path: "sounds/fire_6.ogg")
+    explosionSound = CF_Audio.fromOGG(path: "sounds/8bit_expl_short_00.ogg")
     music = CF_Audio.fromOGG(path: "music/Zero Respect.ogg")
 
     // Play music
@@ -105,7 +107,7 @@ class Game {
       spawnMonsters(amount: randomNumber)
     }
 
-    if cf_on_interval(1, 0) {
+    if cf_on_interval(0.5, 0) {
       stars.append(makeStar())
     }
 
@@ -173,7 +175,7 @@ class Game {
           /// Add an explosion
           state.explosions.append(Explosion(at: state.enemies[j].position))
 
-          //cf_play_sound(explosionSound, cf_sound_params_defaults())
+          cf_play_sound(explosionSound, cf_sound_params_defaults())
         }
       }
     }
@@ -184,11 +186,11 @@ class Game {
     cf_draw_scale_v2(scaleV2)
 
     renderBackground()
+    renderStars()
     renderPlayerBeams()
     renderEnemies()
     renderExplosions()
     state.player.draw()
-    renderStars()
 
     if state.debug {
       renderDebug()
@@ -201,6 +203,7 @@ class Game {
 
   deinit {
     cf_audio_destroy(fireSound)
+    cf_audio_destroy(explosionSound)
     cf_audio_destroy(music)
     cf_destroy_app()
   }
