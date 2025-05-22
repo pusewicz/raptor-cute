@@ -16,7 +16,7 @@ set(CMAKE_MACOSX_RPATH YES)
 # Make sure all binaries are placed into the same build folder.
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
-include(cmake/cute.cmake)
+include(cmake/CuteFramework.cmake)
 
 add_subdirectory(src)
 
