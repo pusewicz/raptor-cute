@@ -10,6 +10,7 @@ class Game {
   var state: State!
   var background: Background!
   var fireSound: CF_Audio!
+  var music: CF_Audio!
 
   /// Screen width and height
   var width: Int32 = 0
@@ -51,6 +52,10 @@ class Game {
     spawnMonsters(amount: 2)
     background = Background()
     fireSound = CF_Audio.fromOGG(path: "sounds/fire_6.ogg")
+    music = CF_Audio.fromOGG(path: "music/Zero Respect.ogg")
+
+    // Play music
+    cf_music_play(music, 3)
 
     // Spawn stars
     for _ in 0..<10 {
@@ -196,6 +201,7 @@ class Game {
 
   deinit {
     cf_audio_destroy(fireSound)
+    cf_audio_destroy(music)
     cf_destroy_app()
   }
 }
