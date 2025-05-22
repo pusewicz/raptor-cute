@@ -33,7 +33,7 @@ extension Game {
 
   func updateEnemies() {
     for i in state.enemies.indices {
-      state.enemies[i].update()
+      state.enemies[i].update(state: self.state)
 
       // Mark enemy as destroyed when out of bounds
       if state.enemies[i].position.y < Float(-canvasHeight / 2) - 8 {

@@ -25,7 +25,7 @@ extension Game {
 
   func renderEnemies() {
     for i in state.enemies.indices {
-      state.enemies[i].draw()
+      state.enemies[i].draw(state: self.state)
     }
   }
 

@@ -72,8 +72,8 @@ class Game {
     let offset = halfWidth / amount
     for i in 0..<amount {
       let position = CF_V2(
-        x: (Float(i) * Float(16 + 4)) - Float(offset), y: Float(canvasHeight / 2))
-      state.enemies.append(Enemy(at: position))
+        x: (Float(i) * Float(16 + 4)) - Float(offset), y: Float(canvasHeight / 2) - 32)
+      state.enemies.append(Enemy(at: position, playerPosition: state.player.position))
     }
   }
 
@@ -103,7 +103,7 @@ class Game {
     cf_app_get_size(&width, &height)
 
     if cf_on_interval(4, 0) {
-      let randomNumber = Int32.random(in: 3...12)
+      let randomNumber = Int32.random(in: 1...3)
       spawnMonsters(amount: randomNumber)
     }
 
