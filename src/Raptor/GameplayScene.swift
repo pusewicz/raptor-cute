@@ -388,5 +388,20 @@ class GameplayScene: Scene {
       cf_draw_box(beam.bounds, 0.1, 0)
     }
     cf_draw_pop_color()
+
+    renderImgui()
+  }
+
+  func renderImgui() {
+    withVaList([]) { args in
+      igBegin("Hello", nil, 0)
+      igTextV("Draw Count: \(cf_app_get_framerate())", args)
+      igTextV("Draw Count: \(drawCount)", args)
+      igTextV("Player Position: \(state.player.position)", args)
+      igTextV("Player Beams Count: \(state.playerBeams.count)", args)
+      igTextV("Enemies Count: \(state.enemies.count)", args)
+      igTextV("Explosions Count: \(state.explosions.count)", args)
+      igEnd()
+    }
   }
 }
