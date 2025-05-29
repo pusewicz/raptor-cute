@@ -17,9 +17,6 @@ add_compile_options(
     $<$<COMPILE_LANGUAGE:Swift>:-color-diagnostics>
 )
 
-# Make sure all binaries are placed into the same build folder.
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
-
 include(cmake/StandardProjectSettings.cmake)
 include(cmake/CuteFramework.cmake)
 
