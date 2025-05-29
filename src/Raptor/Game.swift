@@ -7,12 +7,6 @@ class Game {
   let scale: Int32 = 4
   let scaleV2: CF_V2
 
-  var state: State!
-  var background: Background!
-  var fireSound: CF_Audio!
-  var explosionSound: CF_Audio!
-  var music: CF_Audio!
-
   /// Screen width and height
   var width: Int32 = 0
   var height: Int32 = 0
@@ -26,7 +20,9 @@ class Game {
   }
 
   var drawCount: Int32 = 0
-  var stars: [StarParticle] = []
+
+  // Scene Management
+  let sceneManager = SceneManager()
 
   init() {
     self.scaleV2 = CF_V2(x: Float(scale), y: Float(scale))
@@ -49,33 +45,24 @@ class Game {
 
     mountAssetsDirectory(as: "/")
 
-    state = State(player: Player())
-    spawnMonsters(amount: 2)
-    background = Background()
-    fireSound = CF_Audio.fromOGG(path: "sounds/fire_6.ogg")
-    explosionSound = CF_Audio.fromOGG(path: "sounds/8bit_expl_short_00.ogg")
-    music = CF_Audio.fromOGG(path: "music/Zero Respect.ogg")
-
-    // Play music
-    cf_music_play(music, 3)
-
-    // Spawn stars
-    for _ in 0..<10 {
-      stars.append(makeStar())
-    }
-
     Game.current = self
+
+    // Register scenes
+    let mainMenuScene = MainMenuScene(game: self)
+    let gameplayScene = GameplayScene(game: self)
+
+    sceneManager.register(scene: mainMenuScene, withKey: "mainmenu")
+    sceneManager.register(scene: gameplayScene, withKey: "gameplay")
+
+    // Load scenes
+    sceneManager.loadScene("mainmenu")
+    sceneManager.loadScene("gameplay")
+
+    // Start with main menu
+    sceneManager.switchTo("mainmenu")
   }
 
-  func spawnMonsters(amount: Int32 = 3) {
-    let halfWidth = canvasWidth / 2
-    let offset = halfWidth / amount
-    for i in 0..<amount {
-      let position = CF_V2(
-        x: (Float(i) * Float(16 + 4)) - Float(offset), y: Float(canvasHeight / 2) - 32)
-      state.enemies.append(Enemy(at: position, playerPosition: state.player.position))
-    }
-  }
+
 
   func mountAssetsDirectory(as dest: String) {
     guard let base = cf_fs_get_base_directory() else {
@@ -95,116 +82,18 @@ class Game {
     }
   }
 
-  func makeStar() -> StarParticle {
-    StarParticle(canvasWidth: Float(canvasWidth))
-  }
-
   func update() {
     cf_app_get_size(&width, &height)
-
-    if cf_on_interval(4, 0) {
-      let randomNumber = Int32.random(in: 1...3)
-      spawnMonsters(amount: randomNumber)
-    }
-
-    if cf_on_interval(0.5, 0) {
-      stars.append(makeStar())
-    }
-
-    updatePlayer()
-    updatePlayerBeams()
-    updateEnemies()
-    updateExplosions()
-    updateStars()
-    background.update()
-
-    checkCollisions()
-
-    // Remove destroyed beams
-    state.playerBeams.removeAll(where: { $0.isDestroyed })
-
-    // Remove destroyed enemies
-    state.enemies.removeAll(where: { $0.isDestroyed })
-
-    // Remove finished explosions
-    state.explosions.removeAll(where: { $0.isDestroyed })
-
-    var name = "Raptor"
-    if state.debug {
-      name = "Raptor (Debug)"
-    }
-
-    let fps = cf_app_get_smoothed_framerate().rounded()
-    let title =
-      "\(name) - \(state.player.position.x), \(state.player.position.y), Enemies: \(state.enemies.count), Beams: \(state.playerBeams.count), Explosions: \(state.explosions.count), FPS: \(fps), Draws: \(drawCount)"
-    cf_app_set_title(title)
-  }
-
-  func inputPlayer() {
-    if cf_key_just_pressed(CF_KEY_G) {
-      state.debug = !state.debug
-    }
-
-    if cf_key_down(CF_KEY_W) {  // Move up
-      state.player.move(.up)
-    }
-    if cf_key_down(CF_KEY_S) {  // Move down
-      state.player.move(.down)
-    }
-
-    if cf_key_down(CF_KEY_A) {  // Move left
-      state.player.move(.left)
-    }
-
-    if cf_key_down(CF_KEY_D) {  // Move right
-      state.player.move(.right)
-    }
-
-    if cf_key_down(CF_KEY_SPACE) && state.player.canShoot() {
-      state.player.shoot()
-    }
-  }
-
-  func checkCollisions() {
-    for i in state.playerBeams.indices {
-      for j in state.enemies.indices {
-        if state.playerBeams[i].collides(with: state.enemies[j]) {
-          state.playerBeams[i].destroy()
-          state.enemies[j].destroy()
-
-          /// Add an explosion
-          state.explosions.append(Explosion(at: state.enemies[j].position))
-
-          cf_play_sound(explosionSound, cf_sound_params_defaults())
-        }
-      }
-    }
+    sceneManager.update()
   }
 
   func render() {
-    cf_draw_push()
-    cf_draw_scale_v2(scaleV2)
-
-    renderBackground()
-    renderStars()
-    renderPlayerBeams()
-    renderEnemies()
-    renderExplosions()
-    state.player.draw()
-
-    if state.debug {
-      renderDebug()
-    }
-
-    cf_draw_pop()
-
+    sceneManager.render()
     self.drawCount = cf_app_draw_onto_screen(true)
   }
 
   deinit {
-    cf_audio_destroy(fireSound)
-    cf_audio_destroy(explosionSound)
-    cf_audio_destroy(music)
+    sceneManager.unloadAll()
     cf_destroy_app()
   }
 }
