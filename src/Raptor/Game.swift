@@ -23,7 +23,6 @@ class Game {
 
   var shader: CF_Shader?
   var canvas: CF_Canvas?
-  var material: CF_Material?
 
   // Scene Management
   let sceneManager = SceneManager()
@@ -55,7 +54,6 @@ class Game {
     assert(shader?.id != 0, "Failed to create shader")
 
     self.canvas = cf_make_canvas(cf_canvas_defaults(width, height))
-    self.material = cf_make_material()
 
     Game.current = self
 
