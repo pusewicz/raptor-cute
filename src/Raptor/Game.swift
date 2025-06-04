@@ -21,7 +21,7 @@ class Game {
 
   var drawCount: Int32 = 0
 
-  var shader: CF_Shader?
+  var shader: CF_Shader!
   var canvas: CF_Canvas!
 
   // Scene Management
@@ -50,8 +50,11 @@ class Game {
     mountAssetsDirectory(as: "/")
     cf_shader_directory("/assets/shaders")
 
-    self.shader = cf_make_draw_shader("noop.shd")
-    assert(shader?.id != 0, "Failed to create shader")
+    let shader = cf_make_draw_shader("noop.shd")
+    guard shader.id != 0 else {
+      fatalError("Could not create shader")
+    }
+    self.shader = shader
 
     self.canvas = cf_make_canvas(cf_canvas_defaults(width, height))
 
@@ -97,9 +100,6 @@ class Game {
 
   func render() {
     cf_draw_scale_v2(scaleV2)
-    guard let shader else {
-      fatalError("CRT shader not initialized")
-    }
 
     cf_draw_scale_v2(scaleV2)
     sceneManager.render()
