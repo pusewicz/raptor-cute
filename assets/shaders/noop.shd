@@ -1,0 +1,5 @@
+vec4 shader(vec4 color, vec2 pos, vec2 screen_uv, vec4 params)
+{
+    vec4 c = texture(u_image, screen_uv);
+    return c;
+}
