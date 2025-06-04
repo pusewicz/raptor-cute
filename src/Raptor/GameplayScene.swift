@@ -123,10 +123,7 @@ class GameplayScene: Scene {
   }
 
   func render() {
-    guard let game = game else { return }
-
     cf_draw_push()
-    cf_draw_scale_v2(game.scaleV2)
 
     renderBackground()
     renderStars()

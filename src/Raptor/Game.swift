@@ -62,8 +62,6 @@ class Game {
     sceneManager.switchTo("mainmenu")
   }
 
-
-
   func mountAssetsDirectory(as dest: String) {
     guard let base = cf_fs_get_base_directory() else {
       fatalError("Could not get base directoy")
@@ -88,6 +86,7 @@ class Game {
   }
 
   func render() {
+    cf_draw_scale_v2(scaleV2)
     sceneManager.render()
     self.drawCount = cf_app_draw_onto_screen(true)
   }
