@@ -1,3 +1,5 @@
+public typealias V2 = CF_V2
+
 extension CF_V2 {
   public init(_ x: Float, _ y: Float) {
     self.init(x: x, y: y)
