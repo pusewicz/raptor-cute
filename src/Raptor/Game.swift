@@ -22,7 +22,7 @@ class Game {
   var drawCount: Int32 = 0
 
   var shader: CF_Shader?
-  var canvas: CF_Canvas?
+  var canvas: CF_Canvas!
 
   // Scene Management
   let sceneManager = SceneManager()
@@ -99,10 +99,6 @@ class Game {
     cf_draw_scale_v2(scaleV2)
     guard let shader else {
       fatalError("CRT shader not initialized")
-    }
-
-    guard let canvas else {
-      fatalError("Canvas not initialized")
     }
 
     cf_draw_scale_v2(scaleV2)
