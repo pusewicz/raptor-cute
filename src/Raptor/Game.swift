@@ -21,6 +21,10 @@ class Game {
 
   var drawCount: Int32 = 0
 
+  var shader: CF_Shader?
+  var canvas: CF_Canvas?
+  var material: CF_Material?
+
   // Scene Management
   let sceneManager = SceneManager()
 
@@ -29,6 +33,7 @@ class Game {
 
     let options: CF_AppOptionFlags = Int32(CF_APP_OPTIONS_WINDOW_POS_CENTERED_BIT.rawValue)
 
+    // Make app
     let result = cf_make_app(
       "Raptor", 0, 0, 0, screenSize * scale, screenSize * scale, options,
       CommandLine.unsafeArgv[0])
@@ -44,6 +49,13 @@ class Game {
     cf_app_get_size(&width, &height)
 
     mountAssetsDirectory(as: "/")
+    cf_shader_directory("/assets/shaders")
+
+    self.shader = cf_make_draw_shader("noop.shd")
+    assert(shader?.id != 0, "Failed to create shader")
+
+    self.canvas = cf_make_canvas(cf_canvas_defaults(width, height))
+    self.material = cf_make_material()
 
     Game.current = self
 
@@ -87,12 +99,40 @@ class Game {
 
   func render() {
     cf_draw_scale_v2(scaleV2)
+    guard let shader else {
+      fatalError("CRT shader not initialized")
+    }
+
+    guard let canvas else {
+      fatalError("Canvas not initialized")
+    }
+
+    guard let material else {
+      fatalError("Material not initialized")
+    }
+
+    var canvasDims = CF_V2(x: Float(width), y: Float(height))
+
     sceneManager.render()
-    self.drawCount = cf_app_draw_onto_screen(true)
+
+    cf_render_to(canvas, true)
+    cf_apply_canvas(cf_app_get_canvas(), true)
+
+    cf_draw_push_shader(shader)
+    cf_material_set_texture_fs(material, "u_image", cf_canvas_get_target(canvas))
+    cf_material_set_uniform_fs(material, "u_texture_size", &canvasDims, CF_UNIFORM_TYPE_FLOAT2, 1)
+    cf_apply_shader(shader, material)
+    cf_draw_elements()
+    cf_draw_pop_shader()
+
+    self.drawCount = cf_app_draw_onto_screen(false)
   }
 
   deinit {
     sceneManager.unloadAll()
+    if let shader {
+      cf_destroy_shader(shader)
+    }
     cf_destroy_app()
   }
 }
