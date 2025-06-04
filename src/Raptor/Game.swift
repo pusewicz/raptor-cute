@@ -107,24 +107,14 @@ class Game {
       fatalError("Canvas not initialized")
     }
 
-    guard let material else {
-      fatalError("Material not initialized")
-    }
-
-    var canvasDims = CF_V2(x: Float(width), y: Float(height))
-
+    cf_draw_scale_v2(scaleV2)
     sceneManager.render()
 
     cf_render_to(canvas, true)
-    cf_apply_canvas(cf_app_get_canvas(), true)
 
     cf_draw_push_shader(shader)
-    cf_material_set_texture_fs(material, "u_image", cf_canvas_get_target(canvas))
-    cf_material_set_uniform_fs(material, "u_texture_size", &canvasDims, CF_UNIFORM_TYPE_FLOAT2, 1)
-    cf_apply_shader(shader, material)
-    cf_draw_elements()
-    cf_draw_pop_shader()
-
+    cf_draw_set_texture("canvas_tex", cf_canvas_get_target(canvas))
+    cf_draw_box(cf_make_aabb(V2(-64 * scale, -64 * scale), V2(width, height)), 1, 0)
     self.drawCount = cf_app_draw_onto_screen(false)
   }
 

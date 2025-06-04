@@ -1,5 +1,7 @@
+layout(set = 2, binding = 1) uniform sampler2D canvas_tex;
+
 vec4 shader(vec4 color, vec2 pos, vec2 screen_uv, vec4 params)
 {
-    vec4 c = texture(u_image, screen_uv);
+    vec4 c = texture(canvas_tex, screen_uv * vec2(1.0 / 64.0 * 4 , 1.0 / 64.0 * 4));
     return c;
 }
