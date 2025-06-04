@@ -146,7 +146,7 @@ class GameplayScene: Scene {
     let halfWidth = game.canvasWidth / 2
     let offset = halfWidth / amount
     for i in 0..<amount {
-      let position = CF_V2(
+      let position = V2(
         x: (Float(i) * Float(16 + 4)) - Float(offset),
         y: Float(game.canvasHeight / 2) - 32
       )

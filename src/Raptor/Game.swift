@@ -25,7 +25,7 @@ class Game {
   let sceneManager = SceneManager()
 
   init() {
-    self.scaleV2 = CF_V2(x: Float(scale), y: Float(scale))
+    self.scaleV2 = V2(scale, scale)
 
     let options: CF_AppOptionFlags = Int32(CF_APP_OPTIONS_WINDOW_POS_CENTERED_BIT.rawValue)
 
