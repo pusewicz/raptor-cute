@@ -240,7 +240,8 @@ class GameplayScene: Scene {
     }
 
     let fps = cf_app_get_smoothed_framerate().rounded()
-    let title = "\(name) - \(state.player.position.x), \(state.player.position.y), Enemies: \(state.enemies.count), Beams: \(state.playerBeams.count), Explosions: \(state.explosions.count), FPS: \(fps)"
+    let title =
+      "\(name) - \(state.player.position.x), \(state.player.position.y), Enemies: \(state.enemies.count), Beams: \(state.playerBeams.count), Explosions: \(state.explosions.count), FPS: \(fps)"
     cf_app_set_title(title)
   }
 
