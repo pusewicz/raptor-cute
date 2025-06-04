@@ -71,13 +71,11 @@ class MainMenuScene: Scene {
   }
 
   func render() {
-    guard let game else { return }
     if titleSprite == nil || startSprite == nil {
       return
     }
 
     cf_draw_push()
-    cf_draw_scale_v2(game.scaleV2)
 
     titleSprite?.draw()
 

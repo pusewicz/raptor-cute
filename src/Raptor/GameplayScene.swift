@@ -123,10 +123,7 @@ class GameplayScene: Scene {
   }
 
   func render() {
-    guard let game = game else { return }
-
     cf_draw_push()
-    cf_draw_scale_v2(game.scaleV2)
 
     renderBackground()
     renderStars()
@@ -149,7 +146,7 @@ class GameplayScene: Scene {
     let halfWidth = game.canvasWidth / 2
     let offset = halfWidth / amount
     for i in 0..<amount {
-      let position = CF_V2(
+      let position = V2(
         x: (Float(i) * Float(16 + 4)) - Float(offset),
         y: Float(game.canvasHeight / 2) - 32
       )
@@ -243,7 +240,8 @@ class GameplayScene: Scene {
     }
 
     let fps = cf_app_get_smoothed_framerate().rounded()
-    let title = "\(name) - \(state.player.position.x), \(state.player.position.y), Enemies: \(state.enemies.count), Beams: \(state.playerBeams.count), Explosions: \(state.explosions.count), FPS: \(fps)"
+    let title =
+      "\(name) - \(state.player.position.x), \(state.player.position.y), Enemies: \(state.enemies.count), Beams: \(state.playerBeams.count), Explosions: \(state.explosions.count), FPS: \(fps)"
     cf_app_set_title(title)
   }
 

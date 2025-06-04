@@ -28,9 +28,9 @@ struct Enemy {
   ) {
     self.bezier = CubicBezierLine(
       a: position,
-      c0: CF_V2(x: -72, y: 32),
-      c1: CF_V2(x: 72, y: -16),
-      b: CF_V2(x: playerPosition.x, y: playerPosition.y),
+      c0: V2(-72, 32),
+      c1: V2(72, -16),
+      b: playerPosition,
       iters: 24,
       thickness: 1
     )

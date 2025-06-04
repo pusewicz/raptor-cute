@@ -25,7 +25,7 @@ class Game {
   let sceneManager = SceneManager()
 
   init() {
-    self.scaleV2 = CF_V2(x: Float(scale), y: Float(scale))
+    self.scaleV2 = V2(scale, scale)
 
     let options: CF_AppOptionFlags = Int32(CF_APP_OPTIONS_WINDOW_POS_CENTERED_BIT.rawValue)
 
@@ -62,8 +62,6 @@ class Game {
     sceneManager.switchTo("mainmenu")
   }
 
-
-
   func mountAssetsDirectory(as dest: String) {
     guard let base = cf_fs_get_base_directory() else {
       fatalError("Could not get base directoy")
@@ -88,6 +86,7 @@ class Game {
   }
 
   func render() {
+    cf_draw_scale_v2(scaleV2)
     sceneManager.render()
     self.drawCount = cf_app_draw_onto_screen(true)
   }
