@@ -32,6 +32,11 @@ class Game {
 
     let options: CF_AppOptionFlags = Int32(CF_APP_OPTIONS_WINDOW_POS_CENTERED_BIT.rawValue)
 
+    print("Creating Raptor game...")
+    print(
+      "Screen size: logical(\(screenSize) x \(screenSize)), physical(\(screenSize * scale) x \(screenSize * scale))"
+    )
+
     // Make app
     let result = cf_make_app(
       "Raptor", 0, 0, 0, screenSize * scale, screenSize * scale, options,
@@ -103,12 +108,14 @@ class Game {
 
     cf_draw_scale_v2(scaleV2)
     sceneManager.render()
+    cf_draw_pop()
 
     cf_render_to(canvas, true)
 
     cf_draw_push_shader(shader)
     cf_draw_set_texture("canvas_tex", cf_canvas_get_target(canvas))
-    cf_draw_box(cf_make_aabb(V2(-64 * scale, -64 * scale), V2(width, height)), 1, 0)
+    cf_draw_box(
+      cf_make_aabb(V2(-128 * scale, -128 * scale), V2(128 * scale, 128 * scale)), 3, 1)
     self.drawCount = cf_app_draw_onto_screen(false)
   }
 
