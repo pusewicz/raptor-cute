@@ -1,12 +1,32 @@
 import CuteFramework
+import Foundation
 
 class GameplayScene: Scene {
-  private weak var game: Game?
-  private var state: State!
+  private weak var game: Game!
+  private var state: State {
+    get {
+      game.state
+    }
+    set {
+      game.state = newValue
+    }
+  }
   private var background: Background!
   private var stars: [StarParticle] = []
   private var sounds: [String: CF_Audio] = [:]
   private var music: CF_Audio?
+  private var lifeIcon: CF_Sprite!
+
+  private var fontSize: Float = 7
+  private var score = 0
+
+  var scale: Int32 {
+    game.scale
+  }
+
+  var screenSize: Int32 {
+    game.screenSize
+  }
 
   init(game: Game) {
     self.game = game
@@ -16,12 +36,22 @@ class GameplayScene: Scene {
     self.sounds["fire_sound"] = CF_Audio.fromOGG(path: "sounds/fire_6.ogg")
     self.sounds["explosion_sound"] = CF_Audio.fromOGG(path: "sounds/8bit_expl_short_00.ogg")
     self.music = CF_Audio.fromOGG(path: "music/Zero Respect.ogg")
+    self.lifeIcon = loadPng("assets/sprites/life.png")
+  }
+
+  func loadPng(_ path: String) -> CF_Sprite {
+    var result = CF_Result()
+    let sprite = cf_make_easy_sprite_from_png(path, &result)
+    guard !cf_is_error(result) else {
+      fatalError("Could not load sprite from \(path): \(String(cString: result.details))")
+    }
+    return sprite
   }
 
   func enter() {
     // Initialize game state
-    state = State(player: Player())
     background = Background()
+    score = 0
 
     // Spawn initial enemies
     spawnMonsters(amount: 2)
@@ -42,7 +72,7 @@ class GameplayScene: Scene {
     cf_music_stop(0.5)
 
     // Clear game state
-    state = nil
+    state = State(player: Player())
     background = nil
     stars.removeAll()
   }
@@ -92,6 +122,8 @@ class GameplayScene: Scene {
   func update() {
     guard game != nil else { return }
 
+    cf_sprite_update(&lifeIcon)
+
     // Spawn enemies periodically
     if cf_on_interval(4, 0) {
       let randomNumber = Int32.random(in: 1...3)
@@ -131,6 +163,8 @@ class GameplayScene: Scene {
     renderEnemies()
     renderExplosions()
     state.player.draw()
+
+    renderUI()
 
     if state.debug {
       renderDebug()
@@ -222,6 +256,8 @@ class GameplayScene: Scene {
           state.playerBeams[i].destroy()
           state.enemies[j].destroy()
 
+          self.score += 100
+
           // Add an explosion
           state.explosions.append(Explosion(at: state.enemies[j].position))
 
@@ -272,6 +308,53 @@ class GameplayScene: Scene {
   private func renderExplosions() {
     for i in state.explosions.indices {
       state.explosions[i].draw()
+    }
+  }
+
+  private func renderUI() {
+    /**
+     * Render score
+     */
+    cf_push_font("TinyAndChunky")
+    cf_push_font_size(self.fontSize)
+    let scoreText = String(format: "%06d", score)
+    let textWidth = cf_text_width(scoreText, -1)
+    let textHeight = cf_text_height(scoreText, -1)
+
+    cf_draw_push_color(cf_make_color_rgb(20, 91, 132))
+    cf_draw_text(
+      scoreText,
+      V2(
+        screenSize / 2 * scale - Int32(textWidth) * scale - 16,
+        screenSize / 2 * scale - Int32(textHeight) * scale - 24
+      ),
+      -1)
+    cf_draw_push_color(cf_color_white())
+    cf_draw_text(
+      scoreText,
+      V2(
+        screenSize / 2 * scale - Int32(textWidth) * scale - 20,
+        screenSize / 2 * scale - Int32(textHeight) * scale - 20
+      ),
+      -1)
+
+    cf_pop_font()
+
+    /**
+     * Render player lives
+     */
+
+    let lives = state.lives
+
+    let lifeIconSize = Int32(16)
+    let lifeIconOffset = Int32(0)
+    for i in 0..<lives {
+      let x = Int32(screenSize / 2 - 44 + Int32(i) * lifeIconSize)
+      let y = Int32(-screenSize / 2 + lifeIconOffset + Int32(lifeIconSize) / 2 + 4)
+      cf_draw_push()
+      cf_draw_translate_v2(V2(x, y))
+      cf_draw_sprite(&lifeIcon)
+      cf_draw_pop()
     }
   }
 

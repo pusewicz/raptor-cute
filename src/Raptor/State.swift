@@ -4,4 +4,5 @@ struct State {
   var enemies: [Enemy] = []
   var explosions: [Explosion] = []
   var debug = false
+  var lives = 3
 }
