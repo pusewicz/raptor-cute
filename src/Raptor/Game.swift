@@ -6,6 +6,7 @@ class Game {
   let screenSize: Int32 = 64 * 3
   let scale: Int32 = 4
   let scaleV2: CF_V2
+  var state: State!
 
   /// Screen width and height
   var width: Int32 = 0
@@ -63,6 +64,10 @@ class Game {
 
     self.canvas = cf_make_canvas(cf_canvas_defaults(width, height))
 
+    // Load the default font
+    loadFont("assets/fonts/tiny-and-chunky.ttf", "TinyAndChunky")
+    self.state = State(player: Player())
+
     Game.current = self
 
     // Register scenes
@@ -110,13 +115,22 @@ class Game {
     sceneManager.render()
     cf_draw_pop()
 
-    cf_render_to(canvas, true)
+    if !state.debug {
+      cf_render_to(canvas, true)
 
-    cf_draw_push_shader(shader)
-    cf_draw_set_texture("canvas_tex", cf_canvas_get_target(canvas))
-    cf_draw_box(
-      cf_make_aabb(V2(-128 * scale, -128 * scale), V2(128 * scale, 128 * scale)), 3, 1)
+      cf_draw_push_shader(shader)
+      cf_draw_set_texture("canvas_tex", cf_canvas_get_target(canvas))
+      cf_draw_box(
+        cf_make_aabb(V2(-128 * scale, -128 * scale), V2(128 * scale, 128 * scale)), 3, 1)
+    }
     self.drawCount = cf_app_draw_onto_screen(false)
+  }
+
+  func loadFont(_ path: String, _ name: String) {
+    let font = cf_make_font(path, name)
+    guard !cf_is_error(font) else {
+      fatalError("Could not load font at \(path)")
+    }
   }
 
   deinit {
