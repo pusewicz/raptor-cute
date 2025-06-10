@@ -109,8 +109,7 @@ class Game {
   }
 
   func render() {
-    cf_draw_scale_v2(scaleV2)
-
+    cf_draw_push()
     cf_draw_scale_v2(scaleV2)
     sceneManager.render()
     cf_draw_pop()
