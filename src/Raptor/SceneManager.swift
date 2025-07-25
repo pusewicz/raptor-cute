@@ -1,36 +1,36 @@
 import CuteFramework
 
 class SceneManager {
-  private var scenes: [String: Scene] = [:]
+  private var scenes: [SceneIdentifier: Scene] = [:]
   private var currentScene: Scene?
-  private var currentSceneKey: String?
+  private var currentSceneIdentifier: SceneIdentifier?
 
   // MARK: - Scene Registration
 
-  func register(scene: Scene, withKey key: String) {
-    scenes[key] = scene
+  func register(scene: Scene, for identifier: SceneIdentifier) {
+    scenes[identifier] = scene
   }
 
-  func unregister(key: String) {
-    if let scene = scenes.removeValue(forKey: key) {
+  func unregister(identifier: SceneIdentifier) {
+    if let scene = scenes.removeValue(forKey: identifier) {
       scene.unload()
     }
   }
 
   // MARK: - Scene Management
 
-  func loadScene(_ key: String) {
-    guard let scene = scenes[key] else {
-      print("Scene not found: \(key)")
+  func loadScene(_ identifier: SceneIdentifier) {
+    guard let scene = scenes[identifier] else {
+      print("Scene not found: \(identifier.rawValue)")
       return
     }
 
     scene.load()
   }
 
-  func switchTo(_ key: String) {
-    guard let newScene = scenes[key] else {
-      print("Scene not found: \(key)")
+  func switchTo(_ identifier: SceneIdentifier) {
+    guard let newScene = scenes[identifier] else {
+      print("Scene not found: \(identifier.rawValue)")
       return
     }
 
@@ -41,20 +41,20 @@ class SceneManager {
 
     // Switch to new scene
     currentScene = newScene
-    currentSceneKey = key
+    currentSceneIdentifier = identifier
     newScene.enter()
   }
 
-  func unloadScene(_ key: String) {
-    guard let scene = scenes[key] else {
+  func unloadScene(_ identifier: SceneIdentifier) {
+    guard let scene = scenes[identifier] else {
       return
     }
 
     // If it's the current scene, exit it first
-    if currentSceneKey == key {
+    if currentSceneIdentifier == identifier {
       scene.exit()
       currentScene = nil
-      currentSceneKey = nil
+      currentSceneIdentifier = nil
     }
 
     scene.unload()
@@ -73,12 +73,12 @@ class SceneManager {
 
   // MARK: - Utility
 
-  func getCurrentSceneKey() -> String? {
-    return currentSceneKey
+  func getCurrentSceneIdentifier() -> SceneIdentifier? {
+    return currentSceneIdentifier
   }
 
-  func hasScene(_ key: String) -> Bool {
-    return scenes[key] != nil
+  func hasScene(_ identifier: SceneIdentifier) -> Bool {
+    return scenes[identifier] != nil
   }
 
   // MARK: - Cleanup
@@ -96,7 +96,7 @@ class SceneManager {
 
     scenes.removeAll()
     currentScene = nil
-    currentSceneKey = nil
+    currentSceneIdentifier = nil
   }
 
   deinit {

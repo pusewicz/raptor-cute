@@ -74,15 +74,15 @@ class Game {
     let mainMenuScene = MainMenuScene(game: self)
     let gameplayScene = GameplayScene(game: self)
 
-    sceneManager.register(scene: mainMenuScene, withKey: "mainmenu")
-    sceneManager.register(scene: gameplayScene, withKey: "gameplay")
+    sceneManager.register(scene: mainMenuScene, for: .mainMenu)
+    sceneManager.register(scene: gameplayScene, for: .gameplay)
 
     // Load scenes
-    sceneManager.loadScene("mainmenu")
-    sceneManager.loadScene("gameplay")
+    sceneManager.loadScene(.mainMenu)
+    sceneManager.loadScene(.gameplay)
 
     // Start with main menu
-    sceneManager.switchTo("mainmenu")
+    sceneManager.switchTo(.mainMenu)
   }
 
   func mountAssetsDirectory(as dest: String) {

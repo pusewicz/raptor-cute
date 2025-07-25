@@ -97,7 +97,7 @@ class GameplayScene: Scene {
 
     if cf_key_just_pressed(CF_KEY_ESCAPE) {
       // Return to main menu
-      game.sceneManager.switchTo("mainmenu")
+      game.sceneManager.switchTo(.mainMenu)
       return
     }
 
