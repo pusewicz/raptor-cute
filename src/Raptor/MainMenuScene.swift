@@ -48,7 +48,7 @@ class MainMenuScene: Scene {
   func handleInput() {
     if cf_key_just_pressed(CF_KEY_RETURN) || cf_key_just_pressed(CF_KEY_KP_ENTER) {
       // Switch to gameplay scene
-      game?.sceneManager.switchTo("gameplay")
+      game?.sceneManager.switchTo(.gameplay)
     }
 
     // Allow exit with Escape
