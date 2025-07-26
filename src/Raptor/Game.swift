@@ -53,6 +53,8 @@ class Game {
     cf_set_fixed_timestep_max_updates(5)
     cf_app_get_size(&width, &height)
 
+    cf_app_init_imgui()
+
     mountAssetsDirectory(as: "/")
     cf_shader_directory("/assets/shaders")
 
