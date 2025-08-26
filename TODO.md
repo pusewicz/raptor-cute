@@ -1,0 +1,2 @@
+- [ ] Crashing into enemy is game over
+- [ ] Enemies should target player and respect position between them

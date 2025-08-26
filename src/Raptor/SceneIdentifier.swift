@@ -1,4 +1,5 @@
 enum SceneIdentifier: String, CaseIterable {
   case mainMenu = "mainmenu"
-  case gameplay = "gameplay"
+  case gamePlay = "gameplay"
+  case gameOver = "gameover"
 }

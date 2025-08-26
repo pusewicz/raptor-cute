@@ -86,13 +86,13 @@ extension CF_Sprite {
   }
 
   /// Create a sprite from a PNG file
-  static func fromPNG(path: String) -> CF_Sprite {
+  public static func fromPNG(path: String) -> CF_Sprite {
     var result = CF_Result()
     return cf_make_easy_sprite_from_png(path, &result)
   }
 
   /// Create a sprite from pixels
-  static func fromPixels(pixels: [CF_Pixel], width: Int, height: Int) -> CF_Sprite {
+  public static func fromPixels(pixels: [CF_Pixel], width: Int, height: Int) -> CF_Sprite {
     return cf_make_easy_sprite_from_pixels(pixels, Int32(width), Int32(height))
   }
 

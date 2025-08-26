@@ -267,6 +267,26 @@ class GameplayScene: Scene {
         }
       }
     }
+
+    for i in state.enemies.indices {
+      if state.player.collides(with: state.enemies[i]) {
+        state.enemies[i].destroy()
+        state.lives -= 1
+
+        // Add an explosion
+        state.explosions.append(Explosion(at: state.player.position))
+
+        if let explosionSound = sounds["explosion_sound"] {
+          cf_play_sound(explosionSound, cf_sound_params_defaults())
+        }
+
+        if state.lives <= 0 {
+          // Game over, return to main menu
+          game.sceneManager.switchTo(.gameOver)
+          return
+        }
+      }
+    }
   }
 
   private func updateWindowTitle() {
