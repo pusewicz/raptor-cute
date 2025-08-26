@@ -149,9 +149,6 @@ class GameplayScene: Scene {
     state.playerBeams.removeAll(where: { $0.isDestroyed })
     state.enemies.removeAll(where: { $0.isDestroyed })
     state.explosions.removeAll(where: { $0.isDestroyed })
-
-    // Update window title
-    updateWindowTitle()
   }
 
   func render() {
@@ -287,18 +284,6 @@ class GameplayScene: Scene {
         }
       }
     }
-  }
-
-  private func updateWindowTitle() {
-    var name = "Raptor"
-    if state.debug {
-      name = "Raptor (Debug)"
-    }
-
-    let fps = cf_app_get_smoothed_framerate().rounded()
-    let title =
-      "\(name) - \(state.player.position.x), \(state.player.position.y), Enemies: \(state.enemies.count), Beams: \(state.playerBeams.count), Explosions: \(state.explosions.count), FPS: \(fps)"
-    cf_app_set_title(title)
   }
 
   // MARK: - Rendering Methods
