@@ -1,2 +1,2 @@
 - [ ] Enemies should target player and respect position between them
-- [X] Crashing into enemy is game over (#6)
+- [X] [Crashing into enemy is game over](https://github.com/pusewicz/raptor-cute/pull/6)
