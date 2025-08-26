@@ -16,6 +16,14 @@ struct Player {
   private var shootCooldown = 0
   private var velocity: CF_V2
 
+  var bounds: CF_Aabb {
+    cf_make_aabb_pos_w_h(
+      position,
+      Float(shipSprite.w),
+      Float(shipSprite.h)
+    )
+  }
+
   init() {
     self.position = V2(0, -42)
     self.shipSprite = CF_Sprite.fromAseprite(path: "sprites/player_ship.ase")
@@ -85,5 +93,9 @@ struct Player {
     cf_draw_translate(0, -16)
     boosterSprite.draw()
     cf_draw_pop()
+  }
+
+  mutating func collides(with other: Enemy) -> Bool {
+    cf_aabb_to_aabb(self.bounds, other.bounds)
   }
 }

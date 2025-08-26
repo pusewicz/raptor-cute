@@ -73,13 +73,16 @@ class Game {
     // Register scenes
     let mainMenuScene = MainMenuScene(game: self)
     let gameplayScene = GameplayScene(game: self)
+    let gameOverScene = GameOverScene(game: self)
 
     sceneManager.register(scene: mainMenuScene, for: .mainMenu)
-    sceneManager.register(scene: gameplayScene, for: .gameplay)
+    sceneManager.register(scene: gameplayScene, for: .gamePlay)
+    sceneManager.register(scene: gameOverScene, for: .gameOver)
 
     // Load scenes
     sceneManager.loadScene(.mainMenu)
-    sceneManager.loadScene(.gameplay)
+    sceneManager.loadScene(.gamePlay)
+    sceneManager.loadScene(.gameOver)
 
     // Start with main menu
     sceneManager.switchTo(.mainMenu)
