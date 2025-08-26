@@ -1,2 +1,3 @@
 - [ ] Enemies should target player and respect position between them
+- [x] [Configure imgui](https://github.com/pusewicz/raptor-cute/pull/7)
 - [X] [Crashing into enemy is game over](https://github.com/pusewicz/raptor-cute/pull/6)
