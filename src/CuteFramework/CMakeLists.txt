@@ -1,6 +1,7 @@
 # CuteFramework
 set(NAME "CuteFramework")
-file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS *.swift)
+
+set(SOURCES CuteFramework.swift)
 
 # TODO: Link as a static library for Release build
 add_library(${NAME} SHARED ${SOURCES})

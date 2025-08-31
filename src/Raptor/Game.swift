@@ -29,7 +29,7 @@ class Game {
   let sceneManager = SceneManager()
 
   init() {
-    self.scaleV2 = V2(scale, scale)
+    self.scaleV2 = CF_V2(scale, scale)
 
     let options: CF_AppOptionFlags = Int32(CF_APP_OPTIONS_WINDOW_POS_CENTERED_BIT.rawValue)
 
@@ -125,7 +125,7 @@ class Game {
       cf_draw_push_shader(shader)
       cf_draw_set_texture("canvas_tex", cf_canvas_get_target(canvas))
       cf_draw_box(
-        cf_make_aabb(V2(-128 * scale, -128 * scale), V2(128 * scale, 128 * scale)), 3, 1)
+        cf_make_aabb(CF_V2(-128 * scale, -128 * scale), CF_V2(128 * scale, 128 * scale)), 3, 1)
     }
     self.drawCount = cf_app_draw_onto_screen(false)
   }
