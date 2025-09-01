@@ -1,2 +1,3 @@
 add_subdirectory(CuteFramework)
-add_subdirectory(Raptor)
+add_subdirectory(Game)
+add_subdirectory(Engine)

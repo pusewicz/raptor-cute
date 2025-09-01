@@ -12,6 +12,9 @@ set(CMAKE_C_STANDARD 23)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_Swift_LANGUAGE_VERSION ${SWIFT_VERSION})
 set(CMAKE_MACOSX_RPATH YES)
+set(BUILD_SHARED_LIBS ON CACHE BOOL "Build shared libraries" FORCE)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+set(CMAKE_Swift_FLAGS "${CMAKE_Swift_FLAGS} -enable-library-evolution")
 
 add_compile_options(
     $<$<COMPILE_LANGUAGE:Swift>:-color-diagnostics>
@@ -26,7 +29,7 @@ add_subdirectory(src)
 add_custom_target(copy_assets
     COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different
     "${CMAKE_CURRENT_SOURCE_DIR}/assets/"
-    "$<TARGET_FILE_DIR:${PROJECT_NAME}>/assets"
+    "$<TARGET_FILE_DIR:Engine>/assets"
     COMMENT "Copying assets directory to build directory"
 )
-add_dependencies(${PROJECT_NAME} copy_assets)
+add_dependencies(Engine copy_assets)

@@ -3,10 +3,11 @@ set(CF_FRAMEWORK_BUILD_TESTS OFF)
 set(CF_FRAMEWORK_STATIC OFF) # TODO: Set to ON for Release build
 set(CF_RUNTIME_SHADER_COMPILATION ON)
 set(CF_CUTE_SHADERC ON) # TODO: Do we want an offline shader compiler?
+set(CF_FRAMEWORK_STATIC OFF CACHE BOOL "Build CF as static library" FORCE)
 
-if(APPLE)
-    set(CF_FRAMEWORK_APPLE_FRAMEWORK ON)
-endif()
+# if(APPLE)
+#     set(CF_FRAMEWORK_APPLE_FRAMEWORK ON)
+# endif()
 
 include(FetchContent)
 FetchContent_Declare(
