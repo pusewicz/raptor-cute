@@ -72,7 +72,6 @@ class GameplayScene: Scene {
     cf_music_stop(0.5)
 
     // Clear game state
-    state = State(player: Player())
     background = nil
     stars.removeAll()
   }

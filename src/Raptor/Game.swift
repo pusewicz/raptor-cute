@@ -22,9 +22,6 @@ class Game {
 
   var drawCount: Int32 = 0
 
-  var shader: CF_Shader!
-  var canvas: CF_Canvas!
-
   // Scene Management
   let sceneManager = SceneManager()
 
@@ -62,13 +59,14 @@ class Game {
     guard shader.id != 0 else {
       fatalError("Could not create shader")
     }
-    self.shader = shader
-
-    self.canvas = cf_make_canvas(cf_canvas_defaults(width, height))
 
     // Load the default font
     loadFont("assets/fonts/tiny-and-chunky.ttf", "TinyAndChunky")
-    self.state = State(player: Player())
+    self.state = State(
+      player: Player(),
+      shader: shader,
+      canvas: cf_make_canvas(cf_canvas_defaults(width, height))
+    )
 
     Game.current = self
 
@@ -120,10 +118,10 @@ class Game {
     cf_draw_pop()
 
     if !state.debug {
-      cf_render_to(canvas, true)
+      cf_render_to(state.canvas, true)
 
-      cf_draw_push_shader(shader)
-      cf_draw_set_texture("canvas_tex", cf_canvas_get_target(canvas))
+      cf_draw_push_shader(state.shader)
+      cf_draw_set_texture("canvas_tex", cf_canvas_get_target(state.canvas))
       cf_draw_box(
         cf_make_aabb(CF_V2(-128 * scale, -128 * scale), CF_V2(128 * scale, 128 * scale)), 3, 1)
     }
@@ -139,9 +137,7 @@ class Game {
 
   deinit {
     sceneManager.unloadAll()
-    if let shader {
-      cf_destroy_shader(shader)
-    }
+    cf_destroy_shader(state.shader)
     cf_destroy_app()
   }
 }
