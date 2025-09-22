@@ -105,8 +105,4 @@ class SceneManager {
     currentScene = nil
     currentSceneIdentifier = nil
   }
-
-  deinit {
-    // unloadAll()
-  }
 }
