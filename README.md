@@ -17,5 +17,5 @@ Raptor is a simple shoot-em up game made with [Swift](https://www.swift.org/) an
 ```bash
 git clone https://github.com/pusewicz/raptor-cute.git
 cd raptor-cute
-rake run
+rake compile run
 ```
