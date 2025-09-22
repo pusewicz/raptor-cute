@@ -6,7 +6,6 @@ public final class Game {
 
   let screenSize: Int32 = 64 * 3
   let scale: Int32 = 4
-  let scaleV2: CF_V2
   var state: State!
 
   /// Screen width and height
@@ -27,8 +26,6 @@ public final class Game {
   let sceneManager = SceneManager()
 
   public init() async {
-    self.scaleV2 = CF_V2(scale, scale)
-
     let options: CF_AppOptionFlags = Int32(CF_APP_OPTIONS_WINDOW_POS_CENTERED_BIT.rawValue)
 
     print("Creating Raptor game...")
@@ -113,7 +110,7 @@ public final class Game {
 
   func render() {
     cf_draw_push()
-    cf_draw_scale_v2(scaleV2)
+    cf_draw_scale(Float(scale), Float(scale))
     sceneManager.render()
     cf_draw_pop()
 
