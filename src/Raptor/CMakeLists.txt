@@ -1,6 +1,24 @@
 # Raptor
 set(NAME "raptor")
-file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS *.swift)
+
+set(SOURCES
+    Background.swift
+    Enemy.swift
+    Enemy+Type.swift
+    Explosion.swift
+    Game.swift
+    GameOverScene.swift
+    GameplayScene.swift
+    MainMenuScene.swift
+    Player.swift
+    PlayerBeam.swift
+    Scene.swift
+    SceneIdentifier.swift
+    SceneManager.swift
+    StarParticle.swift
+    State.swift
+    main.swift
+)
 
 add_executable(${NAME} ${SOURCES})
 
