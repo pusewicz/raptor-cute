@@ -1,5 +1,6 @@
 import CuteFramework
 
+@MainActor
 class Game {
   nonisolated(unsafe) static weak var current: Game!
 
@@ -25,7 +26,7 @@ class Game {
   // Scene Management
   let sceneManager = SceneManager()
 
-  init() {
+  init() async {
     self.scaleV2 = CF_V2(scale, scale)
 
     let options: CF_AppOptionFlags = Int32(CF_APP_OPTIONS_WINDOW_POS_CENTERED_BIT.rawValue)
@@ -85,7 +86,7 @@ class Game {
     sceneManager.loadScene(.gameOver)
 
     // Start with main menu
-    sceneManager.switchTo(.mainMenu)
+    await sceneManager.switchTo(.mainMenu)
   }
 
   func mountAssetsDirectory(as dest: String) {
@@ -97,18 +98,17 @@ class Game {
     cf_fs_mount(path, dest, false)
   }
 
-  func run() {
+  func run() async {
     while cf_app_is_running() {
-      cf_app_update({ state in
-        Game.current.update()
-      })
+      cf_app_update(nil)
+      await Game.current.update()
       render()
     }
   }
 
-  func update() {
+  func update() async {
     cf_app_get_size(&width, &height)
-    sceneManager.update()
+    await sceneManager.update()
   }
 
   func render() {
@@ -136,7 +136,7 @@ class Game {
   }
 
   deinit {
-    sceneManager.unloadAll()
+    // sceneManager.unloadAll()
     cf_destroy_shader(state.shader)
     cf_destroy_app()
   }
