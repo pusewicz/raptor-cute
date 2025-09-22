@@ -12,7 +12,6 @@ set(SOURCES
     Player.swift
     PlayerBeam.swift
     Scene.swift
-    SceneIdentifier.swift
     SceneManager.swift
     StarParticle.swift
     State.swift

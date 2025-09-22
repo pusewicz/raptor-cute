@@ -2,6 +2,12 @@ import CuteFramework
 
 @MainActor
 class SceneManager {
+  enum SceneIdentifier: String, CaseIterable {
+    case mainMenu = "mainmenu"
+    case gamePlay = "gameplay"
+    case gameOver = "gameover"
+  }
+
   private var scenes: [SceneIdentifier: Scene] = [:]
   private var currentScene: Scene?
   private var currentSceneIdentifier: SceneIdentifier?
