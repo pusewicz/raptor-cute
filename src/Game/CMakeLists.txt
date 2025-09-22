@@ -1,8 +1,6 @@
-# Raptor
-set(NAME "raptor")
+set(NAME "Game")
 
 set(SOURCES
-    App.swift
     Background.swift
     Enemy.swift
     Enemy+Type.swift
@@ -20,10 +18,9 @@ set(SOURCES
     State.swift
 )
 
-add_executable(${NAME} ${SOURCES})
+add_library(${NAME} SHARED ${SOURCES})
 
 target_link_libraries(${NAME} CuteFramework)
 target_compile_options(${NAME} PRIVATE
-    $<$<COMPILE_LANGUAGE:Swift>:-parse-as-library>
     $<$<COMPILE_LANGUAGE:Swift>:-color-diagnostics>
 )

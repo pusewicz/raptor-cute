@@ -1,7 +1,7 @@
 import CuteFramework
 
 @MainActor
-class Game {
+public final class Game {
   nonisolated(unsafe) static weak var current: Game!
 
   let screenSize: Int32 = 64 * 3
@@ -26,7 +26,7 @@ class Game {
   // Scene Management
   let sceneManager = SceneManager()
 
-  init() async {
+  public init() async {
     self.scaleV2 = CF_V2(scale, scale)
 
     let options: CF_AppOptionFlags = Int32(CF_APP_OPTIONS_WINDOW_POS_CENTERED_BIT.rawValue)
@@ -98,7 +98,7 @@ class Game {
     cf_fs_mount(path, dest, false)
   }
 
-  func run() async {
+  public func run() async {
     while cf_app_is_running() {
       cf_app_update(nil)
       await Game.current.update()

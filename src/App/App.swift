@@ -1,3 +1,5 @@
+import Game
+
 @main
 class App {
   static func main() async {
