@@ -13,10 +13,6 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_Swift_LANGUAGE_VERSION ${SWIFT_VERSION})
 set(CMAKE_MACOSX_RPATH YES)
 
-add_compile_options(
-    $<$<COMPILE_LANGUAGE:Swift>:-color-diagnostics>
-)
-
 include(cmake/StandardProjectSettings.cmake)
 include(cmake/CuteFramework.cmake)
 
