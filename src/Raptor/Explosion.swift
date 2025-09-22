@@ -1,6 +1,6 @@
 import CuteFramework
 
-struct Explosion {
+struct Explosion: Sendable {
   private(set) var position: CF_V2
   var sprite: CF_Sprite
   private(set) var isDestroyed = false

@@ -90,7 +90,7 @@ extension CF_V2 {
 
 }
 
-extension CF_Sprite {
+extension CF_Sprite: @unchecked @retroactive Sendable {
   /// Get the bounding rectangle of the sprite
   var bounds: CF_Rect {
     return CF_Rect(x: 0, y: 0, w: w, h: h)

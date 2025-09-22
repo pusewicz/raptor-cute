@@ -1,6 +1,7 @@
 import CuteFramework
 import Foundation
 
+@MainActor
 class GameplayScene: Scene {
   private weak var game: Game!
   private var state: State {
@@ -48,13 +49,28 @@ class GameplayScene: Scene {
     return sprite
   }
 
-  func enter() {
+  func level1() async {
+      // Spawn initial enemies
+      print("Spawning 2 monsters")
+      spawnMonsters(amount: 2)
+
+      print("Waiting for 10 seconds")
+      try? await Task.sleep(for: .seconds(10))
+
+      print("Spawning 2 monsters")
+      spawnMonsters(amount: 2)
+
+      print("Waiting for 12 seconds")
+      try? await Task.sleep(for: .seconds(12))
+      print("Spawning 3 monsters")
+      spawnMonsters(amount: 3)
+  }
+
+  func enter() async {
+    print("Called enter")
     // Initialize game state
     background = Background()
     score = 0
-
-    // Spawn initial enemies
-    spawnMonsters(amount: 2)
 
     // Spawn initial stars
     for _ in 0..<10 {
@@ -64,6 +80,12 @@ class GameplayScene: Scene {
     // Play gameplay music
     if let music {
       cf_music_play(music, 3)
+    }
+
+    print("About to call level1")
+    Task {
+      print("Calling level1")
+      await level1()
     }
   }
 
@@ -87,7 +109,7 @@ class GameplayScene: Scene {
     }
   }
 
-  func handleInput() {
+  func handleInput() async {
     guard let game = game else { return }
 
     if cf_key_just_pressed(CF_KEY_G) {
@@ -96,7 +118,7 @@ class GameplayScene: Scene {
 
     if cf_key_just_pressed(CF_KEY_ESCAPE) {
       // Return to main menu
-      game.sceneManager.switchTo(.mainMenu)
+      await game.sceneManager.switchTo(.mainMenu)
       return
     }
 
@@ -118,16 +140,16 @@ class GameplayScene: Scene {
     }
   }
 
-  func update() {
+  func update() async {
     guard game != nil else { return }
 
     cf_sprite_update(&lifeIcon)
 
-    // Spawn enemies periodically
-    if cf_on_interval(4, 0) {
-      let randomNumber = Int32.random(in: 1...3)
-      spawnMonsters(amount: randomNumber)
-    }
+    // // Spawn enemies periodically
+    // if cf_on_interval(4, 0) {
+    //   let randomNumber = Int32.random(in: 1...3)
+    //   spawnMonsters(amount: randomNumber)
+    // }
 
     // Spawn stars periodically
     if cf_on_interval(0.5, 0) {
@@ -140,9 +162,9 @@ class GameplayScene: Scene {
     updateEnemies()
     updateExplosions()
     updateStars()
-    background.update()
+    background?.update()
 
-    checkCollisions()
+    await checkCollisions()
 
     // Remove destroyed objects
     state.playerBeams.removeAll(where: { $0.isDestroyed })
@@ -245,7 +267,7 @@ class GameplayScene: Scene {
     stars.removeAll(where: { $0.isDestroyed })
   }
 
-  private func checkCollisions() {
+  private func checkCollisions() async {
     for i in state.playerBeams.indices {
       for j in state.enemies.indices {
         if state.playerBeams[i].collides(with: state.enemies[j]) {
@@ -278,7 +300,7 @@ class GameplayScene: Scene {
 
         if state.lives <= 0 {
           // Game over, return to main menu
-          game.sceneManager.switchTo(.gameOver)
+          await game.sceneManager.switchTo(.gameOver)
           return
         }
       }
@@ -288,7 +310,7 @@ class GameplayScene: Scene {
   // MARK: - Rendering Methods
 
   private func renderBackground() {
-    background.draw()
+    background?.draw()
   }
 
   private func renderStars() {

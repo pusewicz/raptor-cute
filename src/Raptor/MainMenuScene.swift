@@ -18,7 +18,7 @@ class MainMenuScene: Scene {
     self.music = CF_Audio.fromOGG(path: "music/Abandoned Hopes.ogg")
   }
 
-  func enter() {
+  func enter() async {
     if let music {
       cf_music_play(music, 0.5)
     }
@@ -45,10 +45,12 @@ class MainMenuScene: Scene {
     }
   }
 
-  func handleInput() {
+  func handleInput() async {
     if cf_key_just_pressed(CF_KEY_RETURN) || cf_key_just_pressed(CF_KEY_KP_ENTER) {
+
+      print("handleInput got enter")
       // Switch to gameplay scene
-      game?.sceneManager.switchTo(.gamePlay)
+      await game?.sceneManager.switchTo(.gamePlay)
     }
 
     // Allow exit with Escape

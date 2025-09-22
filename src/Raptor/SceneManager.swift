@@ -1,5 +1,6 @@
 import CuteFramework
 
+@MainActor
 class SceneManager {
   private var scenes: [SceneIdentifier: Scene] = [:]
   private var currentScene: Scene?
@@ -28,7 +29,7 @@ class SceneManager {
     scene.load()
   }
 
-  func switchTo(_ identifier: SceneIdentifier) {
+  func switchTo(_ identifier: SceneIdentifier) async {
     guard let newScene = scenes[identifier] else {
       print("Scene not found: \(identifier.rawValue)")
       return
@@ -42,7 +43,7 @@ class SceneManager {
     // Switch to new scene
     currentScene = newScene
     currentSceneIdentifier = identifier
-    newScene.enter()
+    await newScene.enter()
   }
 
   func unloadScene(_ identifier: SceneIdentifier) {
@@ -62,9 +63,9 @@ class SceneManager {
 
   // MARK: - Update & Render
 
-  func update() {
-    currentScene?.handleInput()
-    currentScene?.update()
+  func update() async {
+    await currentScene?.handleInput()
+    await currentScene?.update()
   }
 
   func render() {
@@ -100,6 +101,6 @@ class SceneManager {
   }
 
   deinit {
-    unloadAll()
+    // unloadAll()
   }
 }

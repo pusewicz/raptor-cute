@@ -15,9 +15,9 @@ class GameOverScene: Scene {
     self.gameOverSprite = CF_Sprite.fromPNG(path: "sprites/gameover.png")
   }
 
-  func handleInput() {
+  func handleInput() async {
     if cf_key_just_pressed(CF_KEY_RETURN) || cf_key_just_pressed(CF_KEY_KP_ENTER) {
-      game?.sceneManager.switchTo(.mainMenu)
+      await game?.sceneManager.switchTo(.mainMenu)
     }
   }
 
