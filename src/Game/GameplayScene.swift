@@ -1,4 +1,5 @@
-import CuteFramework
+@preconcurrency import CuteFramework
+import Engine
 import Foundation
 
 @MainActor
@@ -20,6 +21,7 @@ class GameplayScene: Scene {
 
   private var fontSize: Float = 7
   private var score = 0
+  private var ecs: ECS
 
   var scale: Int32 {
     game.scale
@@ -31,6 +33,16 @@ class GameplayScene: Scene {
 
   init(game: Game) {
     self.game = game
+    self.ecs = ECS()
+
+    let player = ecs.createEntity()
+    ecs.addComponent(Position(x: 0, y: 0), to: player)
+    ecs.addComponent(Velocity(x: 0, y: 0), to: player)
+    ecs.addComponent(PlayerController(), to: player)
+
+    ecs.addSystem(PlayerControllerSystem())
+    ecs.addSystem(MovementSystem())
+
   }
 
   func load() {
@@ -50,15 +62,15 @@ class GameplayScene: Scene {
   }
 
   func level1() async {
-      // Spawn initial enemies
-      spawnMonsters(amount: 2)
+    // Spawn initial enemies
+    spawnMonsters(amount: 2)
 
-      try? await Task.sleep(for: .seconds(10))
+    try? await Task.sleep(for: .seconds(10))
 
-      spawnMonsters(amount: 2)
+    spawnMonsters(amount: 2)
 
-      try? await Task.sleep(for: .seconds(12))
-      spawnMonsters(amount: 3)
+    try? await Task.sleep(for: .seconds(12))
+    spawnMonsters(amount: 3)
   }
 
   func enter() async {
@@ -137,6 +149,8 @@ class GameplayScene: Scene {
 
   func update() async {
     guard game != nil else { return }
+
+    self.ecs.update(deltaTime: CF_DELTA_TIME)
 
     cf_sprite_update(&lifeIcon)
 
