@@ -51,18 +51,13 @@ class GameplayScene: Scene {
 
   func level1() async {
       // Spawn initial enemies
-      print("Spawning 2 monsters")
       spawnMonsters(amount: 2)
 
-      print("Waiting for 10 seconds")
       try? await Task.sleep(for: .seconds(10))
 
-      print("Spawning 2 monsters")
       spawnMonsters(amount: 2)
 
-      print("Waiting for 12 seconds")
       try? await Task.sleep(for: .seconds(12))
-      print("Spawning 3 monsters")
       spawnMonsters(amount: 3)
   }
 

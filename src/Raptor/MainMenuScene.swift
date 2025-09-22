@@ -48,7 +48,6 @@ class MainMenuScene: Scene {
   func handleInput() async {
     if cf_key_just_pressed(CF_KEY_RETURN) || cf_key_just_pressed(CF_KEY_KP_ENTER) {
 
-      print("handleInput got enter")
       // Switch to gameplay scene
       await game?.sceneManager.switchTo(.gamePlay)
     }

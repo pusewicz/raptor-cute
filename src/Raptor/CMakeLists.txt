@@ -2,6 +2,7 @@
 set(NAME "raptor")
 
 set(SOURCES
+    App.swift
     Background.swift
     Enemy.swift
     Enemy+Type.swift
@@ -17,7 +18,6 @@ set(SOURCES
     SceneManager.swift
     StarParticle.swift
     State.swift
-    main.swift
 )
 
 add_executable(${NAME} ${SOURCES})
