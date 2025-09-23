@@ -18,4 +18,4 @@ task :run do
   sh "cd #{BUILD_DIR} && ./raptor"
 end
 
-task default: :run
+task default: [:compile, :run]
