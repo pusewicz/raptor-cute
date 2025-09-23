@@ -133,7 +133,6 @@ public final class Game {
   }
 
   deinit {
-    cf_destroy_shader(state.shader)
     cf_destroy_app()
   }
 }
