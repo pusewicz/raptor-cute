@@ -346,16 +346,16 @@ class GameplayScene: Scene {
     cf_draw_text(
       scoreText,
       CF_V2(
-        screenSize / 2 * scale - Int32(textWidth) * scale - 16,
-        screenSize / 2 * scale - Int32(textHeight) * scale - 24
+        x: screenSize / 2 * scale - Int32(textWidth) * scale - 16,
+        y: screenSize / 2 * scale - Int32(textHeight) * scale - 24
       ),
       -1)
     cf_draw_push_color(cf_color_white())
     cf_draw_text(
       scoreText,
       CF_V2(
-        screenSize / 2 * scale - Int32(textWidth) * scale - 20,
-        screenSize / 2 * scale - Int32(textHeight) * scale - 20
+        x: screenSize / 2 * scale - Int32(textWidth) * scale - 20,
+        y: screenSize / 2 * scale - Int32(textHeight) * scale - 20
       ),
       -1)
 
@@ -373,7 +373,7 @@ class GameplayScene: Scene {
       let x = Int32(screenSize / 2 - 44 + Int32(i) * lifeIconSize)
       let y = Int32(-screenSize / 2 + lifeIconOffset + Int32(lifeIconSize) / 2 + 4)
       cf_draw_push()
-      cf_draw_translate_v2(CF_V2(x, y))
+      cf_draw_translate_v2(CF_V2(x: x, y: y))
       cf_draw_sprite(&lifeIcon)
       cf_draw_pop()
     }

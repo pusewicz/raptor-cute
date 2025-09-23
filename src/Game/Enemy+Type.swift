@@ -16,9 +16,9 @@ extension Enemy {
 
     var boundsFactor: CF_V2 {
       switch self {
-      case .alan: return CF_V2(0, -1)
-      case .bonBon: return CF_V2(-1, -4)
-      case .lips: return CF_V2(-2, -3)
+      case .alan: return cf_v2(0, -1)
+      case .bonBon: return cf_v2(-1, -4)
+      case .lips: return cf_v2(-2, -3)
       }
     }
 

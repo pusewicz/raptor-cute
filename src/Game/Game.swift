@@ -120,7 +120,7 @@ public final class Game {
       cf_draw_push_shader(state.shader)
       cf_draw_set_texture("canvas_tex", cf_canvas_get_target(state.canvas))
       cf_draw_box(
-        cf_make_aabb(CF_V2(-128 * scale, -128 * scale), CF_V2(128 * scale, 128 * scale)), 3, 1)
+        cf_make_aabb(CF_V2(x: -128 * scale, y: -128 * scale), CF_V2(x: 128 * scale, y: 128 * scale)), 3, 1)
     }
     self.drawCount = cf_app_draw_onto_screen(false)
   }

@@ -25,10 +25,10 @@ struct Player {
   }
 
   init() {
-    self.position = CF_V2(0, -42)
+    self.position = cf_v2(0, -42)
     self.shipSprite = CF_Sprite.fromAseprite(path: "sprites/player_ship.ase")
     self.boosterSprite = CF_Sprite.fromAseprite(path: "sprites/boosters.ase")
-    self.velocity = CF_V2(0, 0)
+    self.velocity = cf_v2(0, 0)
 
     shipSprite.play(animation: "default")
   }
