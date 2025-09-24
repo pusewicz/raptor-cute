@@ -6,7 +6,8 @@ struct StarParticle {
   var position: CF_V2
   private(set) var isDestroyed = false
 
-  init(canvasWidth: Float) {
+  init() {
+    let canvasWidth = Float(cf_app_get_canvas_width())
     self.position = CF_V2(
       x: Float.random(in: -(canvasWidth / 2)...(canvasWidth / 2)),
       y: Float.random(in: -10.0...0.0) + canvasWidth / 2

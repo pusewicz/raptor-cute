@@ -8,18 +8,6 @@ public final class Game {
   let scale: Int32 = 4
   var state: State!
 
-  /// Screen width and height
-  var width: Int32 = 0
-  var height: Int32 = 0
-
-  var canvasWidth: Int32 {
-    return width / scale
-  }
-
-  var canvasHeight: Int32 {
-    return height / scale
-  }
-
   var drawCount: Int32 = 0
 
   // Scene Management
@@ -46,7 +34,6 @@ public final class Game {
     cf_set_target_framerate(60)
     cf_set_fixed_timestep(60)
     cf_set_fixed_timestep_max_updates(5)
-    cf_app_get_size(&width, &height)
 
     cf_app_init_imgui()
 
@@ -63,7 +50,7 @@ public final class Game {
     self.state = State(
       player: Player(),
       shader: shader,
-      canvas: cf_make_canvas(cf_canvas_defaults(width, height))
+      canvas: cf_make_canvas(cf_canvas_defaults(cf_app_get_canvas_width(), cf_app_get_canvas_height()))
     )
 
     Game.current = self
@@ -104,7 +91,6 @@ public final class Game {
   }
 
   func update() async {
-    cf_app_get_size(&width, &height)
     await sceneManager.update()
   }
 

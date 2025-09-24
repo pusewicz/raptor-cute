@@ -189,23 +189,19 @@ class GameplayScene: Scene {
   // MARK: - Private Methods
 
   private func spawnMonsters(amount: Int32) {
-    guard let game = game else { return }
-    let halfWidth = game.canvasWidth / 2
+    let halfWidth = cf_app_get_canvas_height() / 2
     let offset = halfWidth / amount
     for i in 0..<amount {
       let position = CF_V2(
         x: (Float(i) * Float(16 + 4)) - Float(offset),
-        y: Float(game.canvasHeight / 2) - 32
+        y: Float(cf_app_get_canvas_height() / 2) - 32
       )
       state.enemies.append(Enemy(at: position, playerPosition: state.player.position))
     }
   }
 
   private func makeStar() -> StarParticle {
-    guard let game = game else {
-      return StarParticle(canvasWidth: 192)
-    }
-    return StarParticle(canvasWidth: Float(game.canvasWidth))
+    StarParticle()
   }
 
   private func updatePlayer() {
@@ -222,24 +218,22 @@ class GameplayScene: Scene {
   }
 
   private func updatePlayerBeams() {
-    guard let game = game else { return }
     for i in state.playerBeams.indices {
       state.playerBeams[i].update()
 
       // Mark beam as destroyed when out of bounds
-      if state.playerBeams[i].position.y > Float(game.canvasHeight / 2) + 8 {
+      if state.playerBeams[i].position.y > Float(cf_app_get_canvas_height() / 2) + 8 {
         state.playerBeams[i].destroy()
       }
     }
   }
 
   private func updateEnemies() {
-    guard let game = game else { return }
     for i in state.enemies.indices {
       state.enemies[i].update(state: self.state)
 
       // Mark enemy as destroyed when out of bounds
-      if state.enemies[i].position.y < Float(-game.canvasHeight / 2) - 8 {
+      if state.enemies[i].position.y < Float(-cf_app_get_canvas_height() / 2) - 8 {
         state.enemies[i].destroy()
       }
     }
@@ -252,10 +246,9 @@ class GameplayScene: Scene {
   }
 
   private func updateStars() {
-    guard let game = game else { return }
     for i in stars.indices {
       stars[i].update()
-      if stars[i].position.y < Float(-game.canvasHeight / 2) {
+      if stars[i].position.y < Float(-cf_app_get_canvas_height() / 2) {
         stars[i].destroy()
       }
     }
