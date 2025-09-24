@@ -8,25 +8,17 @@ class GameplayScene: Scene {
     get {
       game.state
     }
-    set {
-      game.state = newValue
-    }
   }
   private var background: Background!
   private var stars: [StarParticle] = []
   private var sounds: [String: CF_Audio] = [:]
   private var music: CF_Audio?
   private var lifeIcon: CF_Sprite!
-
   private var fontSize: Float = 7
   private var score = 0
 
   var scale: Int32 {
     game.scale
-  }
-
-  var screenSize: Int32 {
-    game.screenSize
   }
 
   init(game: Game) {
@@ -335,23 +327,13 @@ class GameplayScene: Scene {
     let textWidth = cf_text_width(scoreText, -1)
     let textHeight = cf_text_height(scoreText, -1)
 
-    cf_draw_push_color(cf_make_color_rgb(20, 91, 132))
-    cf_draw_text(
-      scoreText,
-      CF_V2(
-        x: screenSize / 2 * scale - Int32(textWidth) * scale - 16,
-        y: screenSize / 2 * scale - Int32(textHeight) * scale - 24
-      ),
-      -1)
-    cf_draw_push_color(cf_color_white())
-    cf_draw_text(
-      scoreText,
-      CF_V2(
-        x: screenSize / 2 * scale - Int32(textWidth) * scale - 20,
-        y: screenSize / 2 * scale - Int32(textHeight) * scale - 20
-      ),
-      -1)
+    let offsetX = cf_app_get_canvas_width() / 2 - Int32(textWidth) * scale
+    let offsetY = cf_app_get_canvas_height() / 2 - Int32(textHeight) * scale
 
+    cf_draw_push_color(cf_make_color_rgb(20, 91, 132))
+    cf_draw_text(scoreText, CF_V2(x: offsetX - 16, y: offsetY - 24), -1)
+    cf_draw_push_color(cf_color_white())
+    cf_draw_text(scoreText, CF_V2(x: offsetX - 20, y: offsetY - 20), -1)
     cf_pop_font()
 
     /**
@@ -363,8 +345,8 @@ class GameplayScene: Scene {
     let lifeIconSize = Int32(16)
     let lifeIconOffset = Int32(0)
     for i in 0..<lives {
-      let x = Int32(screenSize / 2 - 44 + Int32(i) * lifeIconSize)
-      let y = Int32(-screenSize / 2 + lifeIconOffset + Int32(lifeIconSize) / 2 + 4)
+      let x = Int32(cf_app_get_canvas_width() / 2 / scale - 44 + Int32(i) * lifeIconSize)
+      let y = Int32(-cf_app_get_canvas_width() / 2 / scale + lifeIconOffset + Int32(lifeIconSize) / 2 + 4)
       cf_draw_push()
       cf_draw_translate_v2(CF_V2(x: x, y: y))
       cf_draw_sprite(&lifeIcon)
